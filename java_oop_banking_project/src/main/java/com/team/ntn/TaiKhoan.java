@@ -10,22 +10,47 @@ package com.team.ntn;
  */
 public class TaiKhoan {
 
-    private String maKhachHang;
     private KhachHang khachHang;
     private float soDu;
     private String username;
     private String password;
 
-    public TaiKhoan() {
+    public TaiKhoan(KhachHang khachHang) {
+        this.khachHang = khachHang;
+        this.username = this.khachHang.getMaKhachHang();
+
     }
 
-    public TaiKhoan(String maKhachHang, KhachHang khachHang, float soDu, String username, String password) {
-        this.maKhachHang = maKhachHang;
-        //maKhachHang do ngang hang cap: dang thieu
+    public TaiKhoan(KhachHang khachHang, float soDu, String password) throws Exception {
         this.khachHang = khachHang;
-        this.soDu = soDu;
-        this.username = username;
+        setSoDu(soDu);
+        this.username = this.khachHang.getMaKhachHang();
         this.password = password;
+    }
+
+    public void hienThi() {
+        System.out.println("\n----------------------------------------------------------------------------");
+        System.out.printf("\nUsername: %s \t\tPassword: %s\nSo du: %.1f",
+                this.username, this.password, this.soDu);
+    }
+
+    public void tao1TaiKhoan() {
+        
+        System.out.println("~~~~~Nhap tai khoan ");
+        System.out.printf("Username: %s\n", this.username);
+
+        System.out.print("Password: ");
+        this.password = CauHinh.sc.nextLine();
+
+        try {
+            System.out.print("So tien gui: ");
+            float soTien = Float.parseFloat(CauHinh.sc.nextLine());
+            setSoDu(soTien);
+        } catch (NumberFormatException e) {
+            System.err.println("Lỗi định dạng số. Hãy nhập số hợp lệ.");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     private boolean isStrongPassword(String password) {
@@ -66,20 +91,6 @@ public class TaiKhoan {
     }
 
     /**
-     * @return the maKhachHang
-     */
-    public String getMaKhachHang() {
-        return maKhachHang;
-    }
-
-    /**
-     * @param maKhachHang the maKhachHang to set
-     */
-    public void setMaKhachHang(String maKhachHang) {
-        this.maKhachHang = maKhachHang;
-    }
-
-    /**
      * @return the khachHang
      */
     public KhachHang getKhachHang() {
@@ -102,9 +113,14 @@ public class TaiKhoan {
 
     /**
      * @param soDu the soDu to set
+     * @throws Exception if soDu không đạt điều kiện
      */
-    public void setSoDu(float soDu) {
-        this.soDu = soDu;
+    public void setSoDu(float soDu) throws Exception {
+        if (soDu >= 50000) {
+            this.soDu = soDu;
+        } else {
+            throw new Exception("So tien khong dat muc toi thieu!");
+        }
     }
 
     /**

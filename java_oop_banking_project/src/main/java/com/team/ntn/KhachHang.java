@@ -4,10 +4,12 @@
  */
 package com.team.ntn;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,11 +18,13 @@ import java.util.List;
  */
 public class KhachHang {
 
+    private static int dem;
     private String hoTen;
     private String gioiTinh;
     private LocalDate ngaySinh;
     private String queQuan;
     private String CCCD;
+    private String maKhachHang;
     private List<TaiKhoan> dstk = new ArrayList<>();
 
     public KhachHang() {
@@ -31,32 +35,50 @@ public class KhachHang {
         this.gioiTinh = gioiTinh;
         this.ngaySinh = LocalDate.parse(ngaySinh, DateTimeFormatter.ofPattern(CauHinh.DATE_FORMAT));
         this.queQuan = queQuan;
-        this.CCCD = CCCD;
+        setCCCD(CCCD);
+        this.maKhachHang = taoMaKhachHang();
     }
 
     public void hienThi() {
-        System.out.printf("\n\tHo ten: %s\tNgay sinh: %s\tGioi tinh: %s\n\tQue quan: %s\tCCCD: %s\n",
+        System.out.println("\n=============================================================================");
+        System.out.printf("\n\tHo ten: %s\tNgay sinh: %s\tGioi tinh: %s\n\tQue quan: %s\tCCCD: %s\n\tMa khach hang: %s\n",
                 this.hoTen, this.ngaySinh.format(DateTimeFormatter.ofPattern(CauHinh.DATE_FORMAT)),
-                this.gioiTinh, this.queQuan, this.CCCD);
-        
-        //con thieu xuat ds tai khoan
+                this.gioiTinh, this.queQuan, this.CCCD, this.maKhachHang);
+
+        this.dstk.forEach(tk -> tk.hienThi());
+    }
+
+    public static String taoMaKhachHang() {
+        // Lấy ngày tháng năm hiện tại
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+        String soThuTu = String.format("%04d", dem++);
+        String maKhachHang = dateFormat.format(currentDate) + soThuTu;
+        return maKhachHang;
     }
 
     public void nhap1KhachHang() throws Exception {
+        System.out.println("~~~~~Nhap khach hang");
+        this.maKhachHang = taoMaKhachHang();
+        System.out.println("Ma khach hang: " + this.maKhachHang);
+
         System.out.print("Ho ten: ");
         this.hoTen = CauHinh.sc.nextLine();
 
         System.out.print("Ngay sinh: ");
-        this.ngaySinh = LocalDate.parse(CauHinh.sc.nextLine(), DateTimeFormatter.ofPattern(CauHinh.DATE_FORMAT));
+        String ngaySinhInput = CauHinh.sc.nextLine();
+        // Them so 0 vao truoc ngay va thang neu chung chi co 1 chu so
+        ngaySinhInput = ngaySinhInput.replaceAll("(?<!\\d)(\\d)(?!\\d)", "0$1");
+        this.ngaySinh = LocalDate.parse(ngaySinhInput, DateTimeFormatter.ofPattern(CauHinh.DATE_FORMAT));
 
         System.out.print("Gioi tinh(Nam/Nu): ");
         this.setGioiTinh(CauHinh.sc.nextLine());
-        
+
         System.out.print("Que quan: ");
-        this.queQuan= CauHinh.sc.nextLine();
-        
+        this.queQuan = CauHinh.sc.nextLine();
+
         System.out.print("CCCD: ");
-        this.CCCD=CauHinh.sc.nextLine();
+        setCCCD(CauHinh.sc.nextLine());
     }
 
     public void themTaiKhoan(TaiKhoan... a) {
@@ -87,22 +109,22 @@ public class KhachHang {
     /**
      * @param gioiTinh the gioiTinh to set
      */
-    public void setGioiTinh(String gioiTinh) throws Exception {
-        if (null == gioiTinh) {
-            this.gioiTinh = "Khong ro";
-        } else {
-            switch (gioiTinh) {
-                case "Nam":
-                    this.gioiTinh = "Nam";
-                    break;
-                case "Nu":
-                    this.gioiTinh = "Nu";
-                    break;
-                default:
-                    throw new Exception("Gioi tinh khong hop le");
-            }
+public void setGioiTinh(String gioiTinh) throws Exception {
+    if (gioiTinh == null) {
+        this.gioiTinh = "Khong ro";
+    } else {
+        switch (gioiTinh.toLowerCase()) {
+            case "nam":
+                this.gioiTinh = "Nam";
+                break;
+            case "nu":
+                this.gioiTinh = "Nu";
+                break;
+            default:
+                throw new Exception("Gioi tinh khong hop le");
         }
     }
+}
 
     /**
      * @return the ngaySinh
@@ -143,7 +165,40 @@ public class KhachHang {
      * @param CCCD the CCCD to set
      */
     public void setCCCD(String CCCD) {
-        this.CCCD = CCCD;
+        // Kiểm tra xem CCCD chỉ chứa các ký tự số hay không
+        if (CCCD.matches("\\d+")) {
+            this.CCCD = CCCD;
+        } else {
+            System.out.println("CCCD khong hop le");
+        }
+    }
+
+    /**
+     * @return the dstk
+     */
+    public List<TaiKhoan> getDstk() {
+        return dstk;
+    }
+
+    /**
+     * @param dstk the dstk to set
+     */
+    public void setDstk(List<TaiKhoan> dstk) {
+        this.dstk = dstk;
+    }
+
+    /**
+     * @return the maKhachHang
+     */
+    public String getMaKhachHang() {
+        return maKhachHang;
+    }
+
+    /**
+     * @param maKhachHang the maKhachHang to set
+     */
+    public void setMaKhachHang(String maKhachHang) {
+        this.maKhachHang = maKhachHang;
     }
 
 }
