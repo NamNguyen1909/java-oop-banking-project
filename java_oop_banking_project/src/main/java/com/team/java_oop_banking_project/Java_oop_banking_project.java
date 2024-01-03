@@ -16,30 +16,30 @@ public class Java_oop_banking_project {
         
         //Sau khi tao tai khoan nhap thong tin,
         //se xuat tat ca thong tin lai 1 lan va co option sua chua /xac nhan
-        // them menu sua chua cac thuoc tinh cua TaiKhoan... thong tin cu->thong tin moi
+        // them menu sua chua cac thuoc tinh cua Account... thong tin cu->thong tin moi
         
         
         //test
         
         //con thieu kiem tra tuoi tao tai khoan
-        KhachHang  u1= new KhachHang("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "123456789");
-        KhachHang u2= new KhachHang();
+        Customer  u1= new Customer("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "123456789");
+        Customer u2= new Customer();
         
-        u2.nhap1KhachHang();
+        u2.inputCustomer();
         
-        TaiKhoan tk1= new TaiKhoan(u1, 100000, "asdasdasdad");
-        TaiKhoan tk2= new TaiKhoan(u2);
-        TaiKhoan tk3= new TaiKhoan(u1, 1503565000, "tienhoilo");
+        Account tk1= new Account(u1, 100000, "asdasdasdad");
+        Account tk2= new Account(u2);
+        Account tk3= new Account(u1, 1503565000, "tienhoilo");
         
-        tk2.tao1TaiKhoan();
+        tk2.inputAccount();
         
-        u1.themTaiKhoan(tk1,tk3);
-        u2.themTaiKhoan(tk2);
+        u1.add(tk1,tk3);
+        u2.add(tk2);
         
-        NganHang dskh= new NganHang();
+        Bank dskh= new Bank();
         
-        dskh.themKhachHang(u1,u2);
-        dskh.hienThi();
+        dskh.addCustomer(u1,u2);
+        dskh.displayCustomerList();
         
         
         

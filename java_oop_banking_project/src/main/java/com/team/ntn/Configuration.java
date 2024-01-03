@@ -10,7 +10,7 @@ import java.util.Scanner;
  *
  * @author THANH_NAM
  */
-public class CauHinh {
+public class Configuration {
 
     public static final String DATE_FORMAT = "dd/MM/yyyy";
     public static final Scanner sc = new Scanner(System.in);

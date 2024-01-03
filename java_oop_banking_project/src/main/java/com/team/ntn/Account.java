@@ -4,48 +4,50 @@
  */
 package com.team.ntn;
 
+import java.util.Objects;
+
 /**
  *
  * @author THANH_NAM
  */
-public class TaiKhoan {
+public class Account {
 
-    private KhachHang khachHang;
-    private float soDu;
-    private String username;
-    private String password;
+    protected Customer customer;
+    protected float balance;
+    protected String username;
+    protected String password;
 
-    public TaiKhoan(KhachHang khachHang) {
-        this.khachHang = khachHang;
-        this.username = this.khachHang.getMaKhachHang();
+    public Account(Customer customer) {
+        this.customer = customer;
+        this.username = this.customer.getCustomerID();
 
     }
 
-    public TaiKhoan(KhachHang khachHang, float soDu, String password) throws Exception {
-        this.khachHang = khachHang;
-        setSoDu(soDu);
-        this.username = this.khachHang.getMaKhachHang();
-        this.password = password;
+    public Account(Customer customer, float balance, String password) throws Exception {
+        this.customer = customer;
+        setBalance(balance);
+        this.username = this.customer.getCustomerID();
+        setPassword(password);
     }
 
-    public void hienThi() {
+    public void display() {
         System.out.println("\n----------------------------------------------------------------------------");
         System.out.printf("\nUsername: %s \t\tPassword: %s\nSo du: %.1f",
-                this.username, this.password, this.soDu);
+                this.username, this.password, this.balance);
     }
 
-    public void tao1TaiKhoan() {
-        
+    public void inputAccount() {
+
         System.out.println("~~~~~Nhap tai khoan ");
         System.out.printf("Username: %s\n", this.username);
 
         System.out.print("Password: ");
-        this.password = CauHinh.sc.nextLine();
+        setPassword(Configuration.sc.nextLine());
 
         try {
             System.out.print("So tien gui: ");
-            float soTien = Float.parseFloat(CauHinh.sc.nextLine());
-            setSoDu(soTien);
+            float soTien = Float.parseFloat(Configuration.sc.nextLine());
+            setBalance(soTien);
         } catch (NumberFormatException e) {
             System.err.println("Lỗi định dạng số. Hãy nhập số hợp lệ.");
         } catch (Exception e) {
@@ -90,34 +92,57 @@ public class TaiKhoan {
         return hasLetter && hasDigit && hasSpecialChar;
     }
 
-    /**
-     * @return the khachHang
-     */
-    public KhachHang getKhachHang() {
-        return khachHang;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Account otherAccount = (Account) obj;
+
+        // So sánh các thuộc tính quan trọng
+        return Float.compare(otherAccount.balance, balance) == 0
+                && Objects.equals(username, otherAccount.username)
+                && Objects.equals(password, otherAccount.password);
+    }
+
+    @Override
+    public int hashCode() {
+        // Tạo mã băm dựa trên các thuộc tính quan trọng
+        return Objects.hash(balance, username, password);
     }
 
     /**
-     * @param khachHang the khachHang to set
+     * @return the customer
      */
-    public void setKhachHang(KhachHang khachHang) {
-        this.khachHang = khachHang;
+    public Customer getCustomer() {
+        return customer;
     }
 
     /**
-     * @return the soDu
+     * @param customer the customer to set
      */
-    public float getSoDu() {
-        return soDu;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     /**
-     * @param soDu the soDu to set
-     * @throws Exception if soDu không đạt điều kiện
+     * @return the balance
      */
-    public void setSoDu(float soDu) throws Exception {
-        if (soDu >= 50000) {
-            this.soDu = soDu;
+    public float getBalance() {
+        return balance;
+    }
+
+    /**
+     * @param balance the balance to set
+     * @throws Exception if balance không đạt điều kiện
+     */
+    public void setBalance(float balance) throws Exception {
+        if (balance >= 50000) {
+            this.balance = balance;
         } else {
             throw new Exception("So tien khong dat muc toi thieu!");
         }
