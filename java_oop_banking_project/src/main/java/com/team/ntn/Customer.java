@@ -6,6 +6,7 @@ package com.team.ntn;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +32,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String fullName, String gender, String dateOfBirth, String hometown, String IDCard) {
+    public Customer(String fullName, String gender, String dateOfBirth, String hometown, String IDCard) throws Exception {
         this.fullName = fullName;
         this.gender = gender;
         this.dateOfBirth = LocalDate.parse(dateOfBirth, DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
@@ -44,28 +45,59 @@ public class Customer {
         this.accList.addAll(Arrays.asList(a));
     }
 
-    public void inputCustomer() throws Exception {
-        System.out.println("~~~~~Nhap khach hang");
-        this.customerID = generateCustomerID();
-        System.out.println("Ma khach hang: " + this.customerID);
+    public void inputCustomer() {
+        try {
+            System.out.println("~~~~~Nhap khach hang");
+            this.customerID = generateCustomerID();
+            System.out.println("Ma khach hang: " + this.customerID);
 
-        System.out.print("Ho ten: ");
-        this.fullName = Configuration.sc.nextLine();
+            System.out.print("Ho ten: ");
+            this.fullName = Configuration.sc.nextLine();
 
-        System.out.print("Ngay sinh: ");
-        String ngaySinhInput = Configuration.sc.nextLine();
-        // Them so 0 vao truoc ngay va thang neu chung chi co 1 chu so
-        ngaySinhInput = ngaySinhInput.replaceAll("(?<!\\d)(\\d)(?!\\d)", "0$1");
-        this.dateOfBirth = LocalDate.parse(ngaySinhInput, DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
+            LocalDate inputDate = null;
+            do {
+                try {
+                    System.out.print("Ngay sinh: ");
+                    String ngaySinhInput = Configuration.sc.nextLine();
+                    // Them so 0 vao truoc ngay va thang neu chung chi co 1 chu so
+                    ngaySinhInput = ngaySinhInput.replaceAll("(?<!\\d)(\\d)(?!\\d)", "0$1");
+                    inputDate = LocalDate.parse(ngaySinhInput, DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
+                    setDateOfBirth(inputDate);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                    continue; // Nhập lại nếu có lỗi
+                }
 
-        System.out.print("Gioi tinh(Nam/Nu): ");
-        this.setGender(Configuration.sc.nextLine());
+            } while (!isAgeValid(inputDate, 18));
 
-        System.out.print("Que quan: ");
-        this.hometown = Configuration.sc.nextLine();
+            // Vòng lặp để kiểm tra và yêu cầu nhập lại giới tính đến khi hợp lệ
+            String inputGender = null;
+            do {
+                try {
+                    System.out.print("Gioi tinh(Nam/Nu): ");
+                    //thrm trim de loai bo khoang trang truoc va sau 
+                    inputGender = Configuration.sc.nextLine().trim();
+                    this.setGender(inputGender);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            } while (!isValidGender(inputGender));
 
-        System.out.print("CCCD: ");
-        setIDCard(Configuration.sc.nextLine());
+            System.out.print("Que quan: ");
+            this.hometown = Configuration.sc.nextLine();
+
+            do {
+                try {
+                    System.out.print("CCCD: ");
+                    setIDCard(Configuration.sc.nextLine());
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                    continue; // Nhập lại nếu có lỗi
+                }
+            } while (IDCard == null || IDCard.isEmpty());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public static String generateCustomerID() {
@@ -86,7 +118,34 @@ public class Customer {
         System.out.printf("\n\tHo ten: %s\tNgay sinh: %s\tGioi tinh: %s\n\tQue quan: %s\tCCCD: %s\n\tMa khach hang: %s\n",
                 this.fullName, this.dateOfBirth.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)),
                 this.gender, this.hometown, this.IDCard, this.customerID);
+    }
+
+    public void displayAll() {
+        this.display();
         this.displayAccList();
+    }
+
+    //kiem tra tuoi nhap vao co hop le khong 
+    private boolean isAgeValid(LocalDate inputDate, int minAge) {
+        LocalDate currentDate = LocalDate.now();
+        int age = Period.between(inputDate, currentDate).getYears();
+
+        return age >= minAge;
+    }
+
+    // Phương thức kiểm tra giới tính có hợp lệ hay không
+    private boolean isValidGender(String gender) {
+        switch (gender.toLowerCase()) {
+            case "nam" -> {
+                return true;
+            }
+            case "nu" -> {
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
     }
 
     @Override
@@ -98,7 +157,7 @@ public class Customer {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        
+
         // kiem tra co khac class hoac la null khong
         //tranh loi NullPointerException
         Customer customer = (Customer) obj;
@@ -133,15 +192,13 @@ public class Customer {
         if (gender == null) {
             this.gender = "Khong ro";
         } else {
-            switch (gender.toLowerCase()) {
-                case "nam":
-                    this.gender = "Nam";
-                    break;
-                case "nu":
-                    this.gender = "Nu";
-                    break;
-                default:
-                    throw new Exception("Gioi tinh khong hop le");
+            if (isValidGender(gender)) {
+                switch (gender.toLowerCase()) {
+                    case "nam" -> this.gender = "Nam";
+                    case "nu" -> this.gender = "Nu";
+                }
+            } else {
+                throw new Exception("Gioi tinh khong hop le!\n");
             }
         }
     }
@@ -155,9 +212,14 @@ public class Customer {
 
     /**
      * @param dateOfBirth the dateOfBirth to set
+     * @throws Exception nếu tuổi không đủ 18
      */
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setDateOfBirth(LocalDate dateOfBirth) throws Exception {
+        if (isAgeValid(dateOfBirth, 18)) {
+            this.dateOfBirth = dateOfBirth;
+        } else {
+            throw new Exception("Tuoi phai lon hon hoac bang 18!\n");
+        }
     }
 
     /**
@@ -183,13 +245,14 @@ public class Customer {
 
     /**
      * @param IDCard the IDCard to set
+     * @throws Exception nếu CCCD không hợp lệ
      */
-    public void setIDCard(String IDCard) {
+    public void setIDCard(String IDCard) throws Exception {
         // Kiểm tra xem IDCard chỉ chứa các ký tự số hay không
         if (IDCard.matches("\\d+")) {
             this.IDCard = IDCard;
         } else {
-            System.out.println("CCCD khong hop le");
+            throw new Exception("CCCD khong hop le!\n");
         }
     }
 

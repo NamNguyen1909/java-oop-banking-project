@@ -6,7 +6,9 @@ package com.team.ntn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -41,11 +43,31 @@ public class Bank {
     }
 
     public void displayCustomerList() {
+        System.out.println("\nDanh sach khach hang : ");
+
         this.customerList.forEach(u -> u.display());
     }
 
     public void displayAccountList() {
+        System.out.println("\nDanh sach tai khoan: ");
+
         this.accountList.forEach(u -> u.display());
+    }
+
+    //Tra cứu khách hàng theo họ tên và mã số khách hàng.
+    public List<Customer> searchCustomer(String kw) {
+        return this.customerList.stream()
+                .filter(c -> c.getFullName().contains(kw) || c.getCustomerID().equals(kw))
+                .collect(Collectors.toList());
+    }
+
+    //Tra cứu danh sách tài khoản của một khách hàng theo mã số khách hàng.
+    public List<Account> searchCusAcc(String kw) {
+        return this.customerList.stream()
+                .filter(c -> c.getCustomerID().equals(kw))
+                .findFirst()
+                .map(Customer::getAccList)
+                .orElse(Collections.emptyList());
     }
 
     /**

@@ -27,19 +27,22 @@ public class Java_oop_banking_project {
         
         u2.inputCustomer();
         
-        Account tk1= new Account(u1, 100000, "asdasdasdad");
+        Account tk1= new Account(u1, 100000, "asdasdasdad08312**");
         Account tk2= new Account(u2);
-        Account tk3= new Account(u1, 1503565000, "tienhoilo");
-        
-        tk2.inputAccount();
-        
+        Account tk3= new Account(u1, 1503565000, "tienhoilo@@223");
         u1.add(tk1,tk3);
         u2.add(tk2);
+        //tai khoan phai thuoc customer truoc thi username moi dc gan ma tao tai khoan tiep
+        tk2.inputAccount();
+        
+
         
         Bank dskh= new Bank();
         
         dskh.addCustomer(u1,u2);
+        dskh.addAccount();
         dskh.displayCustomerList();
+        dskh.displayAccountList();
         
         
         

@@ -41,26 +41,42 @@ public class Account {
     }
 
     public void inputAccount() {
-        this.username = this.customer.getCustomerID();
+        setUsername(this.customer.getCustomerID());
         System.out.println("~~~~~Nhap tai khoan ");
+        //hien thi ten tai khoan
         System.out.printf("Username: %s\n", this.username);
 
-        System.out.print("Password: ");
-        setPassword(Configuration.sc.nextLine());
+        //vong lap nhap+check mat khau
+        String pass;
+        do {
+            System.out.print("Password: ");
+            pass = Configuration.sc.nextLine();
+            setPassword(pass);
+        } while (!isStrongPassword(pass));
 
-        try {
-            System.out.print("So tien gui: ");
-            float soTien = Float.parseFloat(Configuration.sc.nextLine());
-            if (soTien >= 100000) {
-                setBalance(balance);
-            } else {
-                throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+        //vong lap check so tien 
+        float soTien;
+        do {
+            try {
+                System.out.print("So tien gui: ");
+                soTien = Float.parseFloat(Configuration.sc.nextLine());
+                if (soTien >= 100000) {
+                    setBalance(soTien);
+                } else {
+                    throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+                }
+            } catch (NumberFormatException e) {
+                System.err.println("Loi dinh dang so. Hay nhap so hop le.\n");
+                continue; // Nhập lại nếu có lỗi định dạng số
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                continue; // Nhập lại nếu có lỗi khác
             }
-        } catch (NumberFormatException e) {
-            System.err.println("Lỗi định dạng số. Hãy nhập số hợp lệ.");
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+
+            // Nếu chương trình đã đi đến đây, nghĩa là giá trị soTien hợp lệ
+            break; // Thoát khỏi vòng lặp
+        } while (true); // Lặp lại nếu giá trị soTien không hợp lệ
+
     }
 
     private boolean isStrongPassword(String password) {
@@ -110,7 +126,7 @@ public class Account {
             setBalance(this.balance - amount);
             System.out.println("Rut tien thanh cong!");
         } else {
-            throw new Exception("o tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
+            throw new Exception("So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
         }
     }
 
@@ -122,7 +138,7 @@ public class Account {
         return true;
     }
 
-    public void  renewTerm() {
+    public void renewTerm() {
 
     }
 
@@ -205,7 +221,7 @@ public class Account {
         if (isStrongPassword(password)) {
             this.password = password;
         } else {
-            System.out.println("Mật khẩu không đủ mạnh. Yêu cầu ít nhất 8 ký tự, bao gồm chữ cái, chữ số và ký tự đặc biệt.");
+            System.out.println("Mat khau khong du manh. Yeu cau it nhat 8 ky tu, bao gom chu cai, chu so và ky tu dac biet.\n");
         }
     }
 
