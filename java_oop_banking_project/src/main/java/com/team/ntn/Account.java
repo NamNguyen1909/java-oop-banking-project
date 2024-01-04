@@ -112,6 +112,17 @@ public class Account {
         } else {
             throw new Exception("o tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
         }
+    }
+
+    public double calculateInterest() {
+        return 0;
+    }
+
+    public boolean checkTerm() {
+        return true;
+    }
+
+    public void  renewTerm() {
 
     }
 
