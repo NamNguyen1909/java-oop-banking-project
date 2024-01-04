@@ -25,7 +25,11 @@ public class Account {
 
     public Account(Customer customer, float balance, String password) throws Exception {
         this.customer = customer;
-        setBalance(balance);
+        if (balance >= 100000) {
+            setBalance(balance);
+        } else {
+            throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+        }
         this.username = this.customer.getCustomerID();
         setPassword(password);
     }
@@ -37,7 +41,7 @@ public class Account {
     }
 
     public void inputAccount() {
-
+        this.username = this.customer.getCustomerID();
         System.out.println("~~~~~Nhap tai khoan ");
         System.out.printf("Username: %s\n", this.username);
 
@@ -47,7 +51,11 @@ public class Account {
         try {
             System.out.print("So tien gui: ");
             float soTien = Float.parseFloat(Configuration.sc.nextLine());
-            setBalance(soTien);
+            if (soTien >= 100000) {
+                setBalance(balance);
+            } else {
+                throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+            }
         } catch (NumberFormatException e) {
             System.err.println("Lỗi định dạng số. Hãy nhập số hợp lệ.");
         } catch (Exception e) {
@@ -90,6 +98,21 @@ public class Account {
 
         // Tổng hợp các điều kiện
         return hasLetter && hasDigit && hasSpecialChar;
+    }
+
+    public void deposit(float amount) {
+        setBalance(this.balance + amount);
+        System.out.println("Nap tien thanh cong!");
+    }
+
+    public void withdraw(float amount) throws Exception {
+        if (this.balance - amount >= 50000) {
+            setBalance(this.balance - amount);
+            System.out.println("Rut tien thanh cong!");
+        } else {
+            throw new Exception("o tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
+        }
+
     }
 
     @Override
@@ -138,14 +161,9 @@ public class Account {
 
     /**
      * @param balance the balance to set
-     * @throws Exception if balance không đạt điều kiện
      */
-    public void setBalance(float balance) throws Exception {
-        if (balance >= 50000) {
-            this.balance = balance;
-        } else {
-            throw new Exception("So tien khong dat muc toi thieu!");
-        }
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     /**
