@@ -22,8 +22,8 @@ public class Bank {
     public Bank() {
     }
 
-    public void addCustomer(Customer... a) {
-        this.customerList.addAll(Arrays.asList(a));
+    public void addCustomer(Customer... customers) {
+        this.customerList.addAll(Arrays.asList(customers));
     }
 
     public void removeCustomer(Customer customer) {
@@ -31,10 +31,8 @@ public class Bank {
         //so sanh bang equals nen phai override equals
     }
 
-    public void addAccount() {
-        for (Customer customer : this.customerList) {
-            this.accountList.addAll(customer.getAccList());
-        }
+    public void addAccount(Account... accounts) {
+        this.accountList.addAll(Arrays.asList(accounts));
     }
 
     public void removeAccount(Account account) {
@@ -68,6 +66,31 @@ public class Bank {
                 .findFirst()
                 .map(Customer::getAccList)
                 .orElse(Collections.emptyList());
+    }
+
+    public static void menu() {
+        System.out.println("\n\t\t===== MENU =====");
+        System.out.println("1. Mo tai khoan");
+        System.out.println("2. Dang nhap");
+        System.out.println("3. Gui/Rut tien");
+        System.out.println("4. Tinh tien lai");
+        System.out.println("5. Tra cuu khach hang");
+        System.out.println("6. Tra cuu danh sach tai khoan");
+        System.out.println("7. Thoat");
+    }
+
+    public static int getUserSelection(int min, int max) {
+        String input = Configuration.sc.nextLine();
+
+        if (input.matches("\\d*")) {
+            int x = Integer.parseInt(input);
+            if (min <= x && x <= max) {
+                return x;
+            }
+        }
+
+        System.out.println("Vui long chon lai!");
+        return -1;
     }
 
     /**

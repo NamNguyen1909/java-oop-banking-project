@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -55,20 +56,22 @@ public class Customer {
             this.fullName = Configuration.sc.nextLine();
 
             LocalDate inputDate = null;
+            boolean validDate = false;
             do {
+                System.out.print("Ngay sinh: ");
+                String ngaySinhInput = Configuration.sc.nextLine();
+
+                // Them so 0 vao truoc ngay va thang neu chung chi co 1 chu so
+                ngaySinhInput = ngaySinhInput.replaceAll("(?<!\\d)(\\d)(?!\\d)", "0$1");
+
                 try {
-                    System.out.print("Ngay sinh: ");
-                    String ngaySinhInput = Configuration.sc.nextLine();
-                    // Them so 0 vao truoc ngay va thang neu chung chi co 1 chu so
-                    ngaySinhInput = ngaySinhInput.replaceAll("(?<!\\d)(\\d)(?!\\d)", "0$1");
                     inputDate = LocalDate.parse(ngaySinhInput, DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
+                    validDate = isAgeValid(inputDate, 18);
                     setDateOfBirth(inputDate);
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                    continue; // Nhập lại nếu có lỗi
+                    System.out.println("Ngay sinh khong hop le. Vui long nhap lai.");
                 }
-
-            } while (!isAgeValid(inputDate, 18));
+            } while (!validDate);
 
             // Vòng lặp để kiểm tra và yêu cầu nhập lại giới tính đến khi hợp lệ
             String inputGender = null;
@@ -114,10 +117,10 @@ public class Customer {
     }
 
     public void display() {
-        System.out.println("\n=============================================================================");
         System.out.printf("\n\tHo ten: %s\tNgay sinh: %s\tGioi tinh: %s\n\tQue quan: %s\tCCCD: %s\n\tMa khach hang: %s\n",
                 this.fullName, this.dateOfBirth.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)),
                 this.gender, this.hometown, this.IDCard, this.customerID);
+        System.out.println("\n=============================================================================");
     }
 
     public void displayAll() {
@@ -194,8 +197,10 @@ public class Customer {
         } else {
             if (isValidGender(gender)) {
                 switch (gender.toLowerCase()) {
-                    case "nam" -> this.gender = "Nam";
-                    case "nu" -> this.gender = "Nu";
+                    case "nam" ->
+                        this.gender = "Nam";
+                    case "nu" ->
+                        this.gender = "Nu";
                 }
             } else {
                 throw new Exception("Gioi tinh khong hop le!\n");

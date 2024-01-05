@@ -35,9 +35,9 @@ public class Account {
     }
 
     public void display() {
-        System.out.println("\n----------------------------------------------------------------------------");
         System.out.printf("\nUsername: %s \t\tPassword: %s\nSo du: %.1f",
                 this.username, this.password, this.balance);
+        System.out.println("\n----------------------------------------------------------------------------");
     }
 
     public void inputAccount() {
