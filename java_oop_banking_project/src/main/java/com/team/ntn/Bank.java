@@ -75,7 +75,7 @@ public class Bank {
         System.out.println("3. Gui/Rut tien");
         System.out.println("4. Tinh tien lai");
         System.out.println("5. Tra cuu khach hang");
-        System.out.println("6. Tra cuu danh sach tai khoan");
+        System.out.println("6. Tra cuu danh sach tai khoan");//cua admin
         System.out.println("7. Thoat");
     }
 
