@@ -24,9 +24,9 @@ public class Customer extends Person {
     public Customer()  {
     }
         
-    public Customer(String fullName, String gender, String dateOfBirth, String hometown, String IDCard, String customerID) throws Exception {
+    public Customer(String fullName, String gender, String dateOfBirth, String hometown, String IDCard) throws Exception {
         super(fullName, gender, dateOfBirth, hometown, IDCard);
-        this.customerID = customerID;
+        this.customerID = generateCustomerID();
     }
 
     public void add(Account... a) {

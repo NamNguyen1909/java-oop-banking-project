@@ -20,9 +20,10 @@ public class Bank {
     private List<Employee> employeeList = new ArrayList<>();
 
     private List<Account> accountList = new ArrayList<>();
+    private List<Account> emAccList = new ArrayList<>();
 
     private Person signedInPer = null;
-    private Account signedInAcc= null;
+    private Account signedInAcc = null;
 
     public Bank() {
     }
@@ -51,6 +52,10 @@ public class Bank {
     public void removeAccount(Account account) {
         this.getAccountList().remove(account);
         //so sanh bang equals nen phai override equals
+    }
+
+    public void addEmAcc(EAccount... accounts) {
+        this.getEmAccList().addAll(Arrays.asList(accounts));
     }
 
     public void displayCustomerList() {
@@ -101,19 +106,26 @@ public class Bank {
     public static void cusMenu2() {
         System.out.println("\n1. Thong tin ca nhan");
         System.out.println("2. Danh sach tai khoan");
-        System.out.println("3. Gui tien");
-        System.out.println("4. Rut tien");
-        System.out.println("5. Tinh tien lai");
-        System.out.println("6. Dang xuat");
+        System.out.println("3. Doi mat khau");
+        System.out.println("4. Tao tai khoan co ky han");
+        System.out.println("5. Gui tien");
+        System.out.println("6. Rut tien");
+        System.out.println("7. Tinh tien lai");
+        System.out.println("8. Dang xuat");
     }
 
     public static void emMenu2() {
         System.out.println("\n1. Danh sach tat ca khach hang");
         System.out.println("2. Danh sach tat ca tai khoan");
-        System.out.println("3. Them/xoa khach hang");
-        System.out.println("4. Them/xoa tai khoan");
-        System.out.println("5. Tra cuu khach hang theo ho ten hoac ma so");
-        System.out.println("6. Tra cuu danh sach tai khoan theo ma khach hang");
+        System.out.println("3. Them khach hang");
+        System.out.println("4. Xoa khach hang");
+        System.out.println("5. Them tai khoan");
+        System.out.println("6. Xoa tai khoan");
+        System.out.println("7. Tra cuu khach hang theo ho ten hoac ma so");
+        System.out.println("8. Tra cuu danh sach tai khoan theo ma khach hang");
+        System.out.println("9. Sap xep khach hang theo tong so tien gui giam dan");
+        System.out.println("10. Dang xuat");
+
     }
 
     public static int getUserSelection(int min, int max) {
@@ -149,10 +161,23 @@ public class Bank {
             }
         }
 
+        // Nếu không tìm thấy trong accountList, kiểm tra trong emAccList
+        if (signedInPerson == null) {
+            for (Account emAccount : this.getEmAccList()) {
+                if (emAccount.getUsername().equals(username) && emAccount.getPassword().equals(password)) {
+                    // Lưu thông tin của người đăng nhập
+                    signedInPerson = emAccount.getUser();
+                    setSignedInAcc(emAccount);
+                    System.out.println("Dang nhap thanh cong, Chao mung " + emAccount.getUser().getFullName());
+                    break;
+                }
+            }
+        }
+
         // Kiểm tra nếu người đăng nhập là khách hàng hoặc nhân viên
         if (signedInPerson instanceof Customer) {
             // Lưu thông tin của khách hàng đã đăng nhập
-            setSignedIn((Customer) signedInPerson);            
+            setSignedIn((Customer) signedInPerson);
         } else if (signedInPerson instanceof Employee) {
             // Lưu thông tin của nhân viên đã đăng nhập
             setSignedIn((Employee) signedInPerson);
@@ -202,6 +227,20 @@ public class Bank {
      */
     public void setAccountList(List<Account> accountList) {
         this.accountList = accountList;
+    }
+
+    /**
+     * @return the emAccList
+     */
+    public List<Account> getEmAccList() {
+        return emAccList;
+    }
+
+    /**
+     * @param emAccList the emAccList to set
+     */
+    public void setEmAccList(List<Account> emAccList) {
+        this.emAccList = emAccList;
     }
 
     /**
