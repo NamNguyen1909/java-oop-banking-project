@@ -5,6 +5,7 @@
 package com.team.ntn;
 
 import java.util.Objects;
+import java.util.Random;
 
 /**
  *
@@ -12,26 +13,30 @@ import java.util.Objects;
  */
 public class Account {
 
-    protected Customer customer;
+    protected Person user;
     protected float balance;
     protected String username;
     protected String password;
 
     public Account(Customer customer) {
-        this.customer = customer;
-        this.username = this.customer.getCustomerID();
+        this.user = customer;
+        this.username = customer.getCustomerID();
 
     }
 
-    public Account(Customer customer, float balance, String password) throws Exception {
-        this.customer = customer;
+    public Account(Customer customer, float balance) throws Exception {
+        this.user = customer;
         if (balance >= 100000) {
             setBalance(balance);
         } else {
             throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
         }
-        this.username = this.customer.getCustomerID();
-        setPassword(password);
+        this.username = customer.getCustomerID();
+        this.password = initPassword();
+    }
+    
+    public Account(Employee employee) {
+        this.user=employee;
     }
 
     public void display() {
@@ -40,20 +45,21 @@ public class Account {
         System.out.println("\n----------------------------------------------------------------------------");
     }
 
-    public void inputAccount() {
-        setUsername(this.customer.getCustomerID());
-        System.out.println("~~~~~Nhap tai khoan ");
-        //hien thi ten tai khoan
-        System.out.printf("Username: %s\n", this.username);
+    public void inputAccount() throws InterruptedException {
+        System.out.println("\n~~~~~Nhap tai khoan ");
 
+        setUsername(this.user.getUserId());
+        this.password = initPassword();
+        System.out.printf("Username: %s\t\tPassword: %s\n", this.username, this.password);
+
+        //doi mat khau sau
         //vong lap nhap+check mat khau
-        String pass;
-        do {
-            System.out.print("Password: ");
-            pass = Configuration.sc.nextLine();
-            setPassword(pass);
-        } while (!isStrongPassword(pass));
-
+//        String pass;
+//        do {
+//            System.out.print("Password: ");
+//            pass = Configuration.sc.nextLine();
+//            setPassword(pass);
+//        } while (!isStrongPassword(pass));
         //vong lap check so tien 
         float soTien;
         do {
@@ -66,7 +72,7 @@ public class Account {
                     throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
                 }
             } catch (NumberFormatException e) {
-                System.err.println("Loi dinh dang so. Hay nhap so hop le.\n");
+                System.err.println("Loi dinh dang so. Hay nhap so hop le.");
                 continue; // Nhập lại nếu có lỗi định dạng số
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -76,7 +82,14 @@ public class Account {
             // Nếu chương trình đã đi đến đây, nghĩa là giá trị soTien hợp lệ
             break; // Thoát khỏi vòng lặp
         } while (true); // Lặp lại nếu giá trị soTien không hợp lệ
+        System.out.println("=>Tao tai khoan thanh cong!!!");
+        Thread.sleep(2000);
+    }
 
+    public String initPassword() {
+        Random rand = new Random();
+        int ranNum = rand.nextInt(1000000); // Số ngẫu nhiên từ 0 đến 999999
+        return String.format("%06d", ranNum); // Định dạng thành chuỗi 6 chữ số
     }
 
     private boolean isStrongPassword(String password) {
@@ -166,17 +179,17 @@ public class Account {
     }
 
     /**
-     * @return the customer
+     * @return the user
      */
-    public Customer getCustomer() {
-        return customer;
+    public Person getUser() {
+        return user;
     }
 
     /**
-     * @param customer the customer to set
+     * @param customer the user to set
      */
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setUser(Person user) {
+        this.user = user;
     }
 
     /**

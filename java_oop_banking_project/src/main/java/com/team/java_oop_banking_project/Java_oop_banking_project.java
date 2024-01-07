@@ -12,10 +12,12 @@ import com.team.ntn.*;
 public class Java_oop_banking_project {
 
     public static void main(String[] args) throws Exception {
-
-
-
-        Bank dskh = new Bank();
+        Bank bank = new Bank();
+        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890");
+        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331");
+        Account a2 = new EAccount(p2, "admin");
+        bank.addEmployee(p1,p2);
+        bank.displayEmployeeList();
 
         int option;
         do {
@@ -28,18 +30,23 @@ public class Java_oop_banking_project {
             switch (option) {
                 case 1:
                     Customer customer = new Customer();
-                    customer.inputCustomer();
+                    customer.input();
                     customer.display();
-                    dskh.addCustomer(customer);
+                    bank.addCustomer(customer);
 
                     Account account = new Account(customer);
                     account.inputAccount();
                     account.display();
-                    dskh.addAccount(account);
-                    
+                    bank.addAccount(account);
+
+                    break;
+                case 2:
+                    bank.signIn();
+                    break;
+                case 3:
                     break;
             }
-        } while (option != 7);
+        } while (option != 5);
 
     }
 }
