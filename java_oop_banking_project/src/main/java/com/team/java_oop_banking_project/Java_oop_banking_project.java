@@ -15,7 +15,9 @@ public class Java_oop_banking_project {
         Bank bank = new Bank();
         Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890");
         Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331");
+        Account a1 = new EAccount(p1, "admin");
         Account a2 = new EAccount(p2, "admin");
+        
         bank.addEmployee(p1,p2);
         bank.displayEmployeeList();
 
