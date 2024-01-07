@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author THANH_NAM
  */
-public abstract class Person {
+public class Person {
 
     protected String fullName;
     protected String gender;

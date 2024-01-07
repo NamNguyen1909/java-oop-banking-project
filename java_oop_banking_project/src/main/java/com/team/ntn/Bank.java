@@ -21,63 +21,66 @@ public class Bank {
 
     private List<Account> accountList = new ArrayList<>();
 
+    private Person signedInPer = null;
+    private Account signedInAcc= null;
+
     public Bank() {
     }
 
     public void addCustomer(Customer... customers) {
-        this.customerList.addAll(Arrays.asList(customers));
+        this.getCustomerList().addAll(Arrays.asList(customers));
     }
 
     public void removeCustomer(Customer customer) {
-        this.customerList.remove(customer);
+        this.getCustomerList().remove(customer);
         //so sanh bang equals nen phai override equals
     }
 
     public void addEmployee(Employee... employees) {
-        this.employeeList.addAll(Arrays.asList(employees));
+        this.getEmployeeList().addAll(Arrays.asList(employees));
     }
 
     public void removeEmployee(Employee employees) {
-        this.employeeList.remove(employees);
+        this.getEmployeeList().remove(employees);
     }
 
     public void addAccount(Account... accounts) {
-        this.accountList.addAll(Arrays.asList(accounts));
+        this.getAccountList().addAll(Arrays.asList(accounts));
     }
 
     public void removeAccount(Account account) {
-        this.accountList.remove(account);
+        this.getAccountList().remove(account);
         //so sanh bang equals nen phai override equals
     }
 
     public void displayCustomerList() {
         System.out.println("\nDanh sach khach hang : ");
 
-        this.customerList.forEach(u -> u.display());
+        this.getCustomerList().forEach(u -> u.display());
     }
 
     public void displayEmployeeList() {
         System.out.println("\nDanh sach nhan vien : ");
 
-        this.employeeList.forEach(e -> e.display());
+        this.getEmployeeList().forEach(e -> e.display());
     }
 
     public void displayAccountList() {
         System.out.println("\nDanh sach tai khoan: ");
 
-        this.accountList.forEach(u -> u.display());
+        this.getAccountList().forEach(u -> u.display());
     }
 
     //Tra cứu khách hàng theo họ tên và mã số khách hàng.
     public List<Customer> searchCustomer(String kw) {
-        return this.customerList.stream()
+        return this.getCustomerList().stream()
                 .filter(c -> c.getFullName().contains(kw) || c.getCustomerID().equals(kw))
                 .collect(Collectors.toList());
     }
 
     //Tra cứu danh sách tài khoản của một khách hàng theo mã số khách hàng.
     public List<Account> searchCusAcc(String kw) {
-        return this.customerList.stream()
+        return this.getCustomerList().stream()
                 .filter(c -> c.getCustomerID().equals(kw))
                 .findFirst()
                 .map(Customer::getAccList)
@@ -93,6 +96,24 @@ public class Bank {
         System.out.println("3. Gui/Rut tien");
         System.out.println("4. Tinh tien lai");
         System.out.println("5. Thoat");
+    }
+
+    public static void cusMenu2() {
+        System.out.println("\n1. Thong tin ca nhan");
+        System.out.println("2. Danh sach tai khoan");
+        System.out.println("3. Gui tien");
+        System.out.println("4. Rut tien");
+        System.out.println("5. Tinh tien lai");
+        System.out.println("6. Dang xuat");
+    }
+
+    public static void emMenu2() {
+        System.out.println("\n1. Danh sach tat ca khach hang");
+        System.out.println("2. Danh sach tat ca tai khoan");
+        System.out.println("3. Them/xoa khach hang");
+        System.out.println("4. Them/xoa tai khoan");
+        System.out.println("5. Tra cuu khach hang theo ho ten hoac ma so");
+        System.out.println("6. Tra cuu danh sach tai khoan theo ma khach hang");
     }
 
     public static int getUserSelection(int min, int max) {
@@ -114,18 +135,31 @@ public class Bank {
         String username = Configuration.sc.nextLine();
         System.out.print("Mat khau: ");
         String password = Configuration.sc.nextLine();
-        if (this.checkSignIn(username, password)) {
-            System.out.println("Dang nhap thanh cong, Chao mung " + this.getCustomerList().stream().filter(c -> c.getCustomerID().equals(username)).findFirst().get().getFullName());
+
+        // Tạo một biến để lưu thông tin đăng nhập
+        Person signedInPerson = null;
+
+        for (Account account : this.getAccountList()) {
+            if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
+                // Lưu thông tin của người đăng nhập
+                signedInPerson = account.getUser();
+                setSignedInAcc(account);
+                System.out.println("Dang nhap thanh cong, Chao mung " + account.getUser().getFullName());
+                break;
+            }
+        }
+
+        // Kiểm tra nếu người đăng nhập là khách hàng hoặc nhân viên
+        if (signedInPerson instanceof Customer) {
+            // Lưu thông tin của khách hàng đã đăng nhập
+            setSignedIn((Customer) signedInPerson);            
+        } else if (signedInPerson instanceof Employee) {
+            // Lưu thông tin của nhân viên đã đăng nhập
+            setSignedIn((Employee) signedInPerson);
         } else {
             System.out.println("Ten dang nhap hoac mat khau khong dung. Vui long thu lai!");
         }
 
-    }
-
-    public boolean checkSignIn(String username, String password) {
-        // Sử dụng anyMatch để kiểm tra xem có tài khoản nào khớp với username và password không
-        return this.getAccountList().stream()
-                .anyMatch(a -> a.getUsername().equals(username) && a.getPassword().equals(password));
     }
 
     /**
@@ -143,6 +177,20 @@ public class Bank {
     }
 
     /**
+     * @return the employeeList
+     */
+    public List<Employee> getEmployeeList() {
+        return employeeList;
+    }
+
+    /**
+     * @param employeeList the employeeList to set
+     */
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
+    }
+
+    /**
      * @return the accountList
      */
     public List<Account> getAccountList() {
@@ -154,6 +202,68 @@ public class Bank {
      */
     public void setAccountList(List<Account> accountList) {
         this.accountList = accountList;
+    }
+
+    /**
+     * @return the signedInPer
+     */
+    public Person getSignedInPer() {
+        return signedInPer;
+    }
+
+    /**
+     * @return the signedInPer
+     */
+    public Customer getSignedInCustomer() {
+        if (signedInPer instanceof Customer) {
+            return (Customer) signedInPer;
+        }
+        return null;
+    }
+
+    /**
+     * @return the signedInPer
+     */
+    public Employee getSignedInEmployee() {
+        if (signedInPer instanceof Employee) {
+            return (Employee) signedInPer;
+        }
+        return null;
+    }
+
+    /**
+     * @param signedInPer the signedInPer to set
+     */
+    public void setSignedInPer(Person signedInPer) {
+        this.signedInPer = signedInPer;
+    }
+
+    /**
+     * @param signedIn the signedInPer to set
+     */
+    public void setSignedIn(Customer signedIn) {
+        this.signedInPer = signedIn;
+    }
+
+    /**
+     * @param signedIn the signedInPer to set
+     */
+    public void setSignedIn(Employee signedIn) {
+        this.signedInPer = signedIn;
+    }
+
+    /**
+     * @return the signedInAcc
+     */
+    public Account getSignedInAcc() {
+        return signedInAcc;
+    }
+
+    /**
+     * @param signedInAcc the signedInAcc to set
+     */
+    public void setSignedInAcc(Account signedInAcc) {
+        this.signedInAcc = signedInAcc;
     }
 
 }
