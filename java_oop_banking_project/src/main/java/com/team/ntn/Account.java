@@ -33,6 +33,7 @@ public class Account {
         }
         this.username = customer.getCustomerID();
         this.password = initPassword();
+        customer.getAccList().add(this);
     }
     
     public Account(Employee employee) {
@@ -129,9 +130,11 @@ public class Account {
         return hasLetter && hasDigit && hasSpecialChar;
     }
 
-    public void deposit(float amount) {
+    public void deposit(float amount) throws InterruptedException {
         setBalance(this.balance + amount);
-        System.out.println("Nap tien thanh cong!");
+        System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n",this.getBalance());
+        Thread.sleep(1500);
+        
     }
 
     public void withdraw(float amount) throws Exception {

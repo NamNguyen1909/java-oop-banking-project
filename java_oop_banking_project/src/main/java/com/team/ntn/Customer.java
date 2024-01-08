@@ -21,9 +21,9 @@ public class Customer extends Person {
     private String customerID;
     private List<Account> accList = new ArrayList<>();
 
-    public Customer()  {
+    public Customer() {
     }
-        
+
     public Customer(String fullName, String gender, String dateOfBirth, String hometown, String IDCard) throws Exception {
         super(fullName, gender, dateOfBirth, hometown, IDCard);
         this.customerID = generateCustomerID();
@@ -71,6 +71,10 @@ public class Customer extends Person {
     public void displayAll() {
         this.display();
         this.displayAccList();
+    }
+
+    public float getTotalDeposite() {
+        return (float) this.getAccList().stream().mapToDouble(Account::getBalance).sum();
     }
 
     @Override

@@ -92,6 +92,15 @@ public class Bank {
                 .orElse(Collections.emptyList());
     }
 
+    public void sortCustomersByTotalDepositDescending() {
+        this.getCustomerList().sort((c1, c2) -> {
+            float totalDeposit1 = c1.getTotalDeposite();
+            float totalDeposit2 = c2.getTotalDeposite();
+            // Sắp xếp giảm dần
+            return -Float.compare(totalDeposit2, totalDeposit1);
+        });
+    }
+
     public static void menu() throws InterruptedException {
         Thread.sleep(1000);
 
@@ -185,6 +194,11 @@ public class Bank {
             System.out.println("Ten dang nhap hoac mat khau khong dung. Vui long thu lai!");
         }
 
+    }
+
+    public void signOut() {
+        this.setSignedInAcc(null);
+        this.setSignedInPer(null);
     }
 
     /**

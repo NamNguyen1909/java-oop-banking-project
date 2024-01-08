@@ -24,7 +24,6 @@ public class Java_oop_banking_project {
         bank.addEmployee(p1, p2);
         bank.addEmAcc(a1, a2);
 //        bank.displayEmployeeList();
-        
 
 //khac hang va tai khoan tao san de test chuc nang admin
         Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
@@ -36,6 +35,7 @@ public class Java_oop_banking_project {
         Account at6 = new Account(ct1, 2200222);
         bank.addCustomer(ct1, ct2);
         bank.addAccount(at3, at4, at5, at6);
+        bank.displayAccountList();
 
         int option;
         float amount;
@@ -95,8 +95,10 @@ public class Java_oop_banking_project {
                                 case 5:
                                     System.out.print("So tien muon gui: ");
                                     amount = Float.parseFloat(Configuration.sc.nextLine());
-                                    bank.getCustomerList().stream().filter(c -> c.equals(bank.getSignedInCustomer())).findFirst().get()
-                                            .getAccList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
+//                                    bank.getCustomerList().stream().filter(c -> c.equals(bank.getSignedInCustomer())).findFirst().get()
+//                                            .getAccList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
+//                                    bank.getAccountList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
+                                    bank.getSignedInAcc().deposit(amount);
                                     break;
                                 case 6:
                                     //rut tien
@@ -107,10 +109,8 @@ public class Java_oop_banking_project {
 
                                     break;
                                 case 8:
-                                    bank.setSignedInAcc(null);
-                                    bank.setSignedInPer(null);
+                                    bank.signOut();
                                     break;
-
                             }
 
                         } while (option != 8);
@@ -200,10 +200,33 @@ public class Java_oop_banking_project {
                                     }
 
                                     break;
+                                case 7:
+                                    System.out.print("Nhap ten/ma khach hang can tim: ");
+                                    String sc7 = Configuration.sc.nextLine();
+                                    List<Customer> foundCus = bank.searchCustomer(sc7);
+                                    if (foundCus != null) {
+                                        System.out.println("=>Tim thay: ");
+                                        foundCus.forEach(a -> a.display());
+                                    } else {
+                                        System.out.println("=>Khong tim thay!");
+                                    }
+                                    break;
+                                case 8:
+                                    System.out.print("Nhap ma khach hang: ");
+                                    String sc8 = Configuration.sc.nextLine();
+                                    List<Account> foundCusAcc = bank.searchCusAcc(sc8);
+                                    if (!foundCusAcc.isEmpty()) {
+                                        System.out.println("Danh sach tai khoan cua " + sc8);
+                                        foundCusAcc.forEach(a -> a.display());
+                                    }
+                                    break;
+                                case 9:
+                                    bank.sortCustomersByTotalDepositDescending();
+                                    bank.getCustomerList().forEach(c -> c.displayAll());
+                                    break;
 
                                 case 10:
-                                    bank.setSignedInAcc(null);
-                                    bank.setSignedInPer(null);
+                                    bank.signOut();
                                     break;
 
                             }
@@ -214,6 +237,53 @@ public class Java_oop_banking_project {
 
                     break;
                 case 3:
+                    System.out.println("~~~~~Dang nhap");
+                    bank.signIn();
+                    if (bank.getSignedInCustomer() != null) {
+                        do {
+                            System.out.println("\n1. Gui tien");
+                            System.out.println("2. Rut tien");
+                            System.out.println("3. Dang xuat");
+
+                            do {
+                                System.out.print("Nhap lua chon cua ban: ");
+                                option = Bank.getUserSelection(1, 3);
+                            } while (option == -1);
+
+                            switch (option) {
+                                case 1:
+                                    System.out.print("So tien muon gui: ");
+                                    amount = Float.parseFloat(Configuration.sc.nextLine());
+                                    bank.getSignedInAcc().deposit(amount);
+                                    break;
+                                case 2:
+                                    //rut tien 
+
+                                    break;
+                                case 3:
+                                    bank.signOut();
+                                    break;
+
+                            }
+                        } while (option != 3);
+                    }
+                    break;
+                case 4:
+                    System.out.println("~~~~~Dang nhap");
+                    bank.signIn();
+                    if (bank.getSignedInCustomer() != null) {
+                        //tinh tien lai
+                        
+                        
+                        
+                        
+                        
+                    }
+                    break;
+                case 5:
+                    bank.signOut();
+                    System.out.println("/n/t=====Goodbye=====/n");
+                    Thread.sleep(2500);
                     break;
             }
         } while (option != 5);
