@@ -64,8 +64,8 @@ public class Customer extends Person {
 
     @Override
     public void display() {
+        System.out.printf("\n\tMa khach hang: %s", this.customerID);
         super.display();
-        System.out.printf("\tMa khach hang: %s\n", this.customerID);
     }
 
     public void displayAll() {

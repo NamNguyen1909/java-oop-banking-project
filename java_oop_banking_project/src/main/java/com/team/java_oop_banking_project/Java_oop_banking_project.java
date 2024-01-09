@@ -16,27 +16,32 @@ public class Java_oop_banking_project {
 
     public static void main(String[] args) throws Exception {
         Bank bank = new Bank();
-        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890");
-        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331");
-        EAccount a1 = new EAccount(p1, "admin");
-        EAccount a2 = new EAccount(p2, "admin");
 
-        bank.addEmployee(p1, p2);
-        bank.addEmAcc(a1, a2);
-//        bank.displayEmployeeList();
+        bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+        bank.readEmAccListFromFile(bank.getEmAccList(), "src/main/resources/emAccList.txt");
+//        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890");
+//        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331");
+//        EAccount a1 = new EAccount(p1, "admin");
+//        EAccount a2 = new EAccount(p2, "admin");
+//
+//        bank.addEmployee(p1, p2);
+//        bank.addEmAcc(a1, a2);
+//
+//        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+//        bank.writeEmAccListToFile(bank.getEmAccList(), "src/main/resources/emAccList.txt");
 
-//khac hang va tai khoan tao san de test chuc nang admin
-        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
-        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
+        bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+        bank.readAccountListFromFile(bank.getAccountList(), "src/main/resources/accountList.txt");
 
-        Account at3 = new Account(ct2, 111111);
-        Account at4 = new Account(ct2, 111001);
-        Account at5 = new Account(ct1, 2222222);
-        Account at6 = new Account(ct1, 2200222);
-        bank.addCustomer(ct1, ct2);
-        bank.addAccount(at3, at4, at5, at6);
-        bank.displayAccountList();
-
+//        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
+//        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
+//
+//        Account at3 = new Account(ct2, 111111);
+//        Account at4 = new Account(ct2, 111001);
+//        Account at5 = new Account(ct1, 2222222);
+//        Account at6 = new Account(ct1, 2200222);
+//        bank.addCustomer(ct1, ct2);
+//        bank.addAccount(at3, at4, at5, at6);
         int option;
         float amount;
         do {
@@ -216,13 +221,19 @@ public class Java_oop_banking_project {
                                     String sc8 = Configuration.sc.nextLine();
                                     List<Account> foundCusAcc = bank.searchCusAcc(sc8);
                                     if (!foundCusAcc.isEmpty()) {
-                                        System.out.println("Danh sach tai khoan cua " + sc8);
+                                        System.out.println("=>Danh sach tai khoan cua " + sc8);
                                         foundCusAcc.forEach(a -> a.display());
                                     }
                                     break;
                                 case 9:
                                     bank.sortCustomersByTotalDepositDescending();
-                                    bank.getCustomerList().forEach(c -> c.displayAll());
+                                    bank.getCustomerList().forEach(c
+                                            -> {
+                                        c.display();
+                                        System.out.println("Tong tien: " + c.getTotalDeposite());
+
+                                    }
+                                    );
                                     break;
 
                                 case 10:
@@ -273,20 +284,17 @@ public class Java_oop_banking_project {
                     bank.signIn();
                     if (bank.getSignedInCustomer() != null) {
                         //tinh tien lai
-                        
-                        
-                        
-                        
-                        
+
                     }
                     break;
                 case 5:
                     bank.signOut();
-                    System.out.println("/n/t=====Goodbye=====/n");
+                    bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+                    bank.writeAccountListToFile(bank.getAccountList(), "src/main/resources/accountList.txt");
+                    System.out.println("\n\t=====Goodbye=====\n");
                     Thread.sleep(2500);
                     break;
             }
         } while (option != 5);
-
     }
 }

@@ -14,7 +14,7 @@ import java.util.Random;
 public class Account {
 
     protected Person user;
-    protected float balance;
+    protected double balance;
     protected String username;
     protected String password;
 
@@ -25,7 +25,7 @@ public class Account {
 
     }
 
-    public Account(Customer customer, float balance) throws Exception {
+    public Account(Customer customer, double balance) throws Exception {
         this.user = customer;
         if (balance >= 100000) {
             setBalance(balance);
@@ -131,7 +131,7 @@ public class Account {
         return hasLetter && hasDigit && hasSpecialChar;
     }
 
-    public void deposit(float amount) throws InterruptedException {
+    public void deposit(double amount) throws InterruptedException {
         if (amount > 0) {
             setBalance(this.balance + amount);
             System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
@@ -141,7 +141,7 @@ public class Account {
         }
     }
 
-    public void withdraw(float amount) throws Exception {
+    public void withdraw(double amount) throws Exception {
         if (amount > 0 && this.balance - amount >= 50000) {
             setBalance(this.balance - amount);
             System.out.println("Rut tien thanh cong!");
@@ -174,7 +174,7 @@ public class Account {
         Account otherAccount = (Account) obj;
 
         // So sánh các thuộc tính quan trọng
-        return Float.compare(otherAccount.balance, balance) == 0
+        return Double.compare(otherAccount.balance, balance) == 0
                 && Objects.equals(username, otherAccount.username)
                 && Objects.equals(password, otherAccount.password);
     }
@@ -202,14 +202,14 @@ public class Account {
     /**
      * @return the balance
      */
-    public float getBalance() {
+    public double getBalance() {
         return balance;
     }
 
     /**
      * @param balance the balance to set
      */
-    public void setBalance(float balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 
@@ -238,11 +238,12 @@ public class Account {
      * @param password the password to set
      */
     public void setPassword(String password) {
-        if (isStrongPassword(password)) {
-            this.password = password;
-        } else {
-            System.out.println("Mat khau khong du manh. Yeu cau it nhat 8 ky tu, bao gom chu cai, chu so và ky tu dac biet.\n");
-        }
+        this.password=password;
+//        if (isStrongPassword(password)) {
+//            this.password = password;
+//        } else {
+//            System.out.println("Mat khau khong du manh. Yeu cau it nhat 8 ky tu, bao gom chu cai, chu so và ky tu dac biet.\n");
+//        }
     }
 
 }

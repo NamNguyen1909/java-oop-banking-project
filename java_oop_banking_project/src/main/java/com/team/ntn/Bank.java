@@ -9,6 +9,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -97,7 +103,7 @@ public class Bank {
             float totalDeposit1 = c1.getTotalDeposite();
             float totalDeposit2 = c2.getTotalDeposite();
             // Sắp xếp giảm dần
-            return -Float.compare(totalDeposit2, totalDeposit1);
+            return Float.compare(totalDeposit2, totalDeposit1);
         });
     }
 
@@ -200,7 +206,208 @@ public class Bank {
         this.setSignedInAcc(null);
         this.setSignedInPer(null);
     }
+    //---------------------------------------------------------------------------
 
+    public void writeCustomerListToFile(List<Customer> customerList, String filePath) {
+        //,false de khong ghi tiep ma ghi de
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+            for (Customer customer : customerList) {
+                // Ghi thông tin của mỗi khách hàng vào tệp tin
+                writer.write(customer.getFullName() + ";"
+                        + customer.getGender() + ";"
+                        + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ";" // Chuyển định dạng ngày
+                        + customer.getHometown() + ";"
+                        + customer.getIDCard() + ";"
+                        + customer.getCustomerID());
+                writer.newLine();
+            }
+            System.out.println("Danh sach khach hang da duoc ghi vao file.");
+        } catch (IOException e) {
+            System.err.println("Loi khi ghi danh sach khach hang vao file: " + e.getMessage());
+        }
+    }
+
+    public void readCustomerListFromFile(List<Customer> customerList, String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Tách thông tin từ dòng đọc được
+                String[] parts = line.split(";");
+                if (parts.length == 5 || parts.length == 6) { // Kiểm tra có đủ thông tin hay không
+                    String fullName = parts[0];
+                    String gender = parts[1];
+                    String dateOfBirth = parts[2];
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Định dạng mong muốn
+                    String hometown = parts[3];
+                    String IDCard = parts[4];
+                    String customerID = (parts.length == 6) ? parts[5] : null;
+
+                    // Tạo đối tượng Customer và thêm vào danh sách
+                    Customer customer = new Customer(fullName, gender, dateOfBirth, hometown, IDCard);
+
+                    // Nếu customerID được đặt trong file, thiết lập cho đối tượng Customer
+                    if (customerID != null && !customerID.isEmpty()) {
+                        customer.setCustomerID(customerID);
+                    }
+
+                    customerList.add(customer);
+                }
+            }
+            System.out.println("Danh sach khach hang da duoc doc tu file.");
+//        } catch (IOException | Exception e) {
+        } catch (Exception e) {
+            System.err.println("Loi khi doc danh sach khach hang tu file: " + e.getMessage());
+        }
+    }
+
+    public void writeEmployeeListToFile(List<Employee> employeeList, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+            for (Employee employee : employeeList) {
+                // Ghi thông tin của mỗi nhân viên vào tệp tin
+                writer.write(employee.getFullName() + ";"
+                        + employee.getGender() + ";"
+                        + employee.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ";" // Chuyển định dạng ngày
+                        + employee.getHometown() + ";"
+                        + employee.getIDCard() + ";"
+                        + employee.getEmployeeID());
+                writer.newLine();
+            }
+            System.out.println("Danh sach nhan vien da duoc ghi vao file.");
+        } catch (IOException e) {
+            System.err.println("Loi khi ghi danh sach nhan vien vao file: " + e.getMessage());
+        }
+    }
+
+    public void readEmployeeListFromFile(List<Employee> employeeList, String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Tách thông tin từ dòng đọc được
+                String[] parts = line.split(";");
+                if (parts.length == 5 || parts.length == 6) { // Kiểm tra có đủ thông tin hay không
+                    String fullName = parts[0];
+                    String gender = parts[1];
+                    String dateOfBirth = parts[2];
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Định dạng mong muốn
+                    String hometown = parts[3];
+                    String IDCard = parts[4];
+                    String employeeID = (parts.length == 6) ? parts[5] : null;
+
+                    // Tạo đối tượng Employee và thêm vào danh sách
+                    Employee employee = new Employee(fullName, gender, dateOfBirth, hometown, IDCard);
+
+                    // Nếu employeeID được đặt trong file, thiết lập cho đối tượng Employee
+                    if (employeeID != null && !employeeID.isEmpty()) {
+                        employee.setEmployeeID(employeeID);
+                    }
+
+                    employeeList.add(employee);
+                }
+            }
+            System.out.println("Danh sach nhan vien da duoc doc tu file.");
+        } catch (Exception e) {
+            System.err.println("Loi khi doc danh sach nhan vien tu file: " + e.getMessage());
+        }
+    }
+
+    public void writeAccountListToFile(List<Account> accountList, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+            for (Account account : accountList) {
+                // Ghi thông tin của mỗi tài khoản vào tệp tin
+                writer.write(account.getUsername() + ";"
+                        + account.getPassword() + ";"
+                        + account.getBalance());
+                writer.newLine();
+            }
+            System.out.println("Danh sach tai khoan da duoc ghi vao file.");
+        } catch (IOException e) {
+            System.err.println("Loi khi ghi danh sach tai khoan vao file: " + e.getMessage());
+        }
+    }
+
+    public void readAccountListFromFile(List<Account> accountList, String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Tách thông tin từ dòng đọc được
+                String[] parts = line.split(";");
+                if (parts.length == 3) { // Kiểm tra có đủ thông tin hay không
+                    String username = parts[0];
+                    String password = parts[1];
+                    float balance = Float.parseFloat(parts[2]);
+
+                    // Tìm customer có customerId giống với username
+                    Customer customer = this.getCustomerList()
+                            .stream()
+                            .filter(c -> c.getCustomerID().equals(username))
+                            .findFirst()
+                            .orElse(null);
+                    if (customer != null) {
+                        Account account = new Account(customer);
+                        account.setUsername(username);
+                        account.setPassword(password);
+                        account.setBalance(balance);
+                        accountList.add(account);
+                    } else {
+                        System.out.println("Khong tim thay khach hang ung voi ID: " + username);
+                    }
+
+                }
+            }
+            System.out.println("Danh sach tai khoan da duoc doc tu file.");
+        } catch (Exception e) {
+            System.err.println("Loi khi doc danh sach tai khoan tu file: " + e.getMessage());
+        }
+    }
+
+    public void writeEmAccListToFile(List<Account> emAccList, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+            for (Account emAccount : emAccList) {
+                // Ghi thông tin của mỗi tài khoản của nhân viên vào tệp tin
+                writer.write(emAccount.getUsername() + ";"
+                        + emAccount.getPassword());
+                writer.newLine();
+            }
+            System.out.println("Danh sach tai khoan nhan vien da duoc ghi vao file.");
+        } catch (IOException e) {
+            System.err.println("Loi khi ghi danh sach tai khoan nhan vien vao file: " + e.getMessage());
+        }
+    }
+
+    public void readEmAccListFromFile(List<Account> emAccList, String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Tách thông tin từ dòng đọc được
+                String[] parts = line.split(";");
+                if (parts.length == 2) { // Kiểm tra có đủ thông tin hay không
+                    String username = parts[0];
+                    String password = parts[1];
+
+                    Employee employee = this.getEmployeeList()
+                            .stream()
+                            .filter(e -> e.getEmployeeID().equals(username))
+                            .findFirst().orElse(null);
+                    if (employee != null) {
+                        // Tạo đối tượng EAccount và thêm vào danh sách
+                        EAccount emAccount = new EAccount(employee, password);
+                        emAccount.setUsername(username);
+
+                        emAccList.add(emAccount);
+                    }
+                     else {
+                        System.out.println("Khong tim thay nhan vien ung voi ID: " + username);
+                    }
+
+                }
+            }
+            System.out.println("Danh sach tai khoan nhan vien da duoc doc tu file.");
+        } catch (Exception e) {
+            System.err.println("Loi khi doc danh sach tai khoan nhan vien tu file: " + e.getMessage());
+        }
+    }
+
+    //---------------------------------------------------------------------------
     /**
      * @return the customerList
      */
