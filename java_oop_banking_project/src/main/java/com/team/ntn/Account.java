@@ -21,6 +21,7 @@ public class Account {
     public Account(Customer customer) {
         this.user = customer;
         this.username = customer.getCustomerID();
+        customer.getAccList().add(this);
 
     }
 
@@ -35,9 +36,9 @@ public class Account {
         this.password = initPassword();
         customer.getAccList().add(this);
     }
-    
+
     public Account(Employee employee) {
-        this.user=employee;
+        this.user = employee;
     }
 
     public void display() {
@@ -132,9 +133,9 @@ public class Account {
 
     public void deposit(float amount) throws InterruptedException {
         setBalance(this.balance + amount);
-        System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n",this.getBalance());
+        System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
         Thread.sleep(1500);
-        
+
     }
 
     public void withdraw(float amount) throws Exception {
