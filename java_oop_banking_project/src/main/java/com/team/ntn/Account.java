@@ -132,14 +132,17 @@ public class Account {
     }
 
     public void deposit(float amount) throws InterruptedException {
-        setBalance(this.balance + amount);
-        System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
-        Thread.sleep(1500);
-
+        if (amount > 0) {
+            setBalance(this.balance + amount);
+            System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
+            Thread.sleep(1500);
+        } else {
+            System.out.println("So tien nap vao phai lon hon 0!\n");
+        }
     }
 
     public void withdraw(float amount) throws Exception {
-        if (this.balance - amount >= 50000) {
+        if (amount > 0 && this.balance - amount >= 50000) {
             setBalance(this.balance - amount);
             System.out.println("Rut tien thanh cong!");
         } else {

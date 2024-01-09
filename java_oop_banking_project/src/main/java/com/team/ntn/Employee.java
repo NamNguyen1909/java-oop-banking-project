@@ -73,7 +73,7 @@ public class Employee  extends Person{
     /**
      * @return the employeeAccount
      */
-    public Account getEmployeeAccount() {
+    public EAccount getEmployeeAccount() {
         return employeeAccount;
     }
 

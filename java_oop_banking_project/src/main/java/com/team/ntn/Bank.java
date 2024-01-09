@@ -140,7 +140,7 @@ public class Bank {
     public static int getUserSelection(int min, int max) {
         String input = Configuration.sc.nextLine();
 
-        if (input.matches("\\d*")) {
+        if (input.matches("\\d+") && !input.isEmpty()) {
             int x = Integer.parseInt(input);
             if (min <= x && x <= max) {
                 return x;
