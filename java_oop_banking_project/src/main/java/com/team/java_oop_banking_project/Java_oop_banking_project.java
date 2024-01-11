@@ -33,15 +33,15 @@ public class Java_oop_banking_project {
         bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
         bank.readAccountListFromFile(bank.getAccountList(), "src/main/resources/accountList.txt");
 
-//        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
-//        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
-//
-//        Account at3 = new Account(ct2, 111111);
-//        Account at4 = new Account(ct2, 111001);
-//        Account at5 = new Account(ct1, 2222222);
-//        Account at6 = new Account(ct1, 2200222);
-//        bank.addCustomer(ct1, ct2);
-//        bank.addAccount(at3, at4, at5, at6);
+        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
+        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
+
+        Account at3 = new UnlimitedAccount(ct2, 111111);
+        Account at4 = new UnlimitedAccount(ct2, 111001);
+        Account at5 = new UnlimitedAccount(ct1, 2222222);
+        Account at6 = new UnlimitedAccount(ct1, 2200222);
+        bank.addCustomer(ct1, ct2);
+        bank.addAccount(at3, at4, at5, at6);
         int option;
         float amount;
         do {
@@ -58,9 +58,8 @@ public class Java_oop_banking_project {
                     c1.display();
                     bank.addCustomer(c1);
 
-                    Account ac1 = new Account(c1);
-                    ac1.inputAccount();
-                    c1.add(ac1);
+                    Account ac1 = new UnlimitedAccount(c1);
+                    ac1.input();
                     ac1.display();
                     bank.addAccount(ac1);
 
@@ -145,9 +144,8 @@ public class Java_oop_banking_project {
                                     c2.display();
                                     bank.addCustomer(c2);
 
-                                    Account ac2 = new Account(c2);
-                                    ac2.inputAccount();
-                                    c2.add(ac2);
+                                    Account ac2 = new UnlimitedAccount(c2);
+                                    ac2.input();
                                     ac2.display();
                                     bank.addAccount(ac2);
                                     break;
@@ -173,13 +171,20 @@ public class Java_oop_banking_project {
                                 case 5:
                                     System.out.print("Them tai khoan cho khach hang co ma: ");
                                     String ma = Configuration.sc.nextLine();
+                                    boolean foundCustomer = false;  // Biến cờ để kiểm tra xem có khách hàng nào được tìm thấy hay không
+
                                     for (Customer c : bank.getCustomerList()) {
                                         if (c.getCustomerID().equals(ma)) {
-                                            //xu ly them tai khoan co ki han
-
-                                        } else {
-                                            System.out.println("=>Khong tim thay khach hang!");
+                                            // Xử lý khi tìm thấy khách hàng
+                                            foundCustomer = true;
+                                            // Thêm tài khoản cho khách hàng có kỳ hạn
+                                            // ...
+                                            break;
                                         }
+                                    }
+
+                                    if (!foundCustomer) {
+                                        System.out.println("=>Khong tim thay khach hang!");
                                     }
                                     break;
                                 case 6:
@@ -230,7 +235,7 @@ public class Java_oop_banking_project {
                                     bank.getCustomerList().forEach(c
                                             -> {
                                         c.display();
-                                        System.out.println("Tong tien: " + c.getTotalDeposite());
+                                        System.out.println("\nTong tien: " + c.getTotalDeposite());
 
                                     }
                                     );
@@ -239,9 +244,7 @@ public class Java_oop_banking_project {
                                 case 10:
                                     bank.signOut();
                                     break;
-
                             }
-
                         } while (option != 10);
 
                     }

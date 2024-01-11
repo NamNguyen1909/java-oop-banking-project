@@ -84,9 +84,16 @@ public class Bank {
 
     //Tra cứu khách hàng theo họ tên và mã số khách hàng.
     public List<Customer> searchCustomer(String kw) {
-        return this.getCustomerList().stream()
+        List<Customer> result = this.getCustomerList().stream()
                 .filter(c -> c.getFullName().contains(kw) || c.getCustomerID().equals(kw))
                 .collect(Collectors.toList());
+
+        // Kiểm tra xem danh sách có rỗng hay không
+        if (result.isEmpty()) {
+            return null;  // hoặc trả về một giá trị đặc biệt để biểu thị không tìm thấy
+        } else {
+            return result;
+        }
     }
 
     //Tra cứu danh sách tài khoản của một khách hàng theo mã số khách hàng.
@@ -210,7 +217,7 @@ public class Bank {
 
     public void writeCustomerListToFile(List<Customer> customerList, String filePath) {
         //,false de khong ghi tiep ma ghi de
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (Customer customer : customerList) {
                 // Ghi thông tin của mỗi khách hàng vào tệp tin
                 writer.write(customer.getFullName() + ";"
@@ -261,7 +268,7 @@ public class Bank {
     }
 
     public void writeEmployeeListToFile(List<Employee> employeeList, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (Employee employee : employeeList) {
                 // Ghi thông tin của mỗi nhân viên vào tệp tin
                 writer.write(employee.getFullName() + ";"
@@ -311,7 +318,7 @@ public class Bank {
     }
 
     public void writeAccountListToFile(List<Account> accountList, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (Account account : accountList) {
                 // Ghi thông tin của mỗi tài khoản vào tệp tin
                 writer.write(account.getUsername() + ";"
@@ -361,7 +368,7 @@ public class Bank {
     }
 
     public void writeEmAccListToFile(List<Account> emAccList, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath,false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (Account emAccount : emAccList) {
                 // Ghi thông tin của mỗi tài khoản của nhân viên vào tệp tin
                 writer.write(emAccount.getUsername() + ";"
@@ -394,8 +401,7 @@ public class Bank {
                         emAccount.setUsername(username);
 
                         emAccList.add(emAccount);
-                    }
-                     else {
+                    } else {
                         System.out.println("Khong tim thay nhan vien ung voi ID: " + username);
                     }
 

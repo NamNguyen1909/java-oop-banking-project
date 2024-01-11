@@ -112,12 +112,11 @@ public class Person {
     }
 
     public void display() {
+        System.out.println("\n=============================================================================");
 
         System.out.printf("\n\tHo ten: %s\tNgay sinh: %s\tGioi tinh: %s\n\tQue quan: %s\t\t\tCCCD: %s\n",
                 this.fullName, this.dateOfBirth.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)),
                 this.gender, this.hometown, this.IDCard);
-        System.out.println("\n=============================================================================");
-
     }
 
     public String getUserId() {

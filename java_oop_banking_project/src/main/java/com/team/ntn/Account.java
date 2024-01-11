@@ -14,26 +14,12 @@ import java.util.Random;
 public class Account {
 
     protected Person user;
-    protected double balance;
     protected String username;
     protected String password;
 
     public Account(Customer customer) {
         this.user = customer;
         this.username = customer.getCustomerID();
-        customer.getAccList().add(this);
-
-    }
-
-    public Account(Customer customer, double balance) throws Exception {
-        this.user = customer;
-        if (balance >= 100000) {
-            setBalance(balance);
-        } else {
-            throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
-        }
-        this.username = customer.getCustomerID();
-        this.password = initPassword();
         customer.getAccList().add(this);
     }
 
@@ -42,50 +28,12 @@ public class Account {
     }
 
     public void display() {
-        System.out.printf("\nUsername: %s \t\tPassword: %s\nSo du: %.1f",
-                this.username, this.password, this.balance);
-        System.out.println("\n----------------------------------------------------------------------------");
+        System.out.printf("\nUsername: %s \t\tPassword: %s\n",
+                this.username, this.password);
     }
 
-    public void inputAccount() throws InterruptedException {
-        System.out.println("\n~~~~~Nhap tai khoan ");
+    public void input() throws InterruptedException {
 
-        setUsername(this.user.getUserId());
-        this.password = initPassword();
-        System.out.printf("Username: %s\t\tPassword: %s\n", this.username, this.password);
-
-        //doi mat khau sau
-        //vong lap nhap+check mat khau
-//        String pass;
-//        do {
-//            System.out.print("Password: ");
-//            pass = Configuration.sc.nextLine();
-//            setPassword(pass);
-//        } while (!isStrongPassword(pass));
-        //vong lap check so tien 
-        float soTien;
-        do {
-            try {
-                System.out.print("So tien gui: ");
-                soTien = Float.parseFloat(Configuration.sc.nextLine());
-                if (soTien >= 100000) {
-                    setBalance(soTien);
-                } else {
-                    throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
-                }
-            } catch (NumberFormatException e) {
-                System.err.println("Loi dinh dang so. Hay nhap so hop le.");
-                continue; // Nhập lại nếu có lỗi định dạng số
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-                continue; // Nhập lại nếu có lỗi khác
-            }
-
-            // Nếu chương trình đã đi đến đây, nghĩa là giá trị soTien hợp lệ
-            break; // Thoát khỏi vòng lặp
-        } while (true); // Lặp lại nếu giá trị soTien không hợp lệ
-        System.out.println("=>Tao tai khoan thanh cong!!!");
-        Thread.sleep(2000);
     }
 
     public String initPassword() {
@@ -131,35 +79,10 @@ public class Account {
         return hasLetter && hasDigit && hasSpecialChar;
     }
 
-    public void deposit(double amount) throws InterruptedException {
-        if (amount > 0) {
-            setBalance(this.balance + amount);
-            System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
-            Thread.sleep(1500);
-        } else {
-            System.out.println("So tien nap vao phai lon hon 0!\n");
-        }
+    public void deposit(double amount) {
     }
 
-    public void withdraw(double amount) throws Exception {
-        if (amount > 0 && this.balance - amount >= 50000) {
-            setBalance(this.balance - amount);
-            System.out.println("Rut tien thanh cong!");
-        } else {
-            throw new Exception("So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
-        }
-    }
-
-    public double calculateInterest() {
-        return 0;
-    }
-
-    public boolean checkTerm() {
-        return true;
-    }
-
-    public void renewTerm() {
-
+    public void withdraw(double amount) {
     }
 
     @Override
@@ -174,15 +97,21 @@ public class Account {
         Account otherAccount = (Account) obj;
 
         // So sánh các thuộc tính quan trọng
-        return Double.compare(otherAccount.balance, balance) == 0
-                && Objects.equals(username, otherAccount.username)
+        return Objects.equals(username, otherAccount.username)
                 && Objects.equals(password, otherAccount.password);
     }
 
     @Override
     public int hashCode() {
         // Tạo mã băm dựa trên các thuộc tính quan trọng
-        return Objects.hash(balance, username, password);
+        return Objects.hash(username, password);
+    }
+
+    public double getBalance() {
+        return 0;
+    }
+
+    public void setBalance(double balance) {
     }
 
     /**
@@ -197,20 +126,6 @@ public class Account {
      */
     public void setUser(Person user) {
         this.user = user;
-    }
-
-    /**
-     * @return the balance
-     */
-    public double getBalance() {
-        return balance;
-    }
-
-    /**
-     * @param balance the balance to set
-     */
-    public void setBalance(double balance) {
-        this.balance = balance;
     }
 
     /**
@@ -238,7 +153,7 @@ public class Account {
      * @param password the password to set
      */
     public void setPassword(String password) {
-        this.password=password;
+        this.password = password;
 //        if (isStrongPassword(password)) {
 //            this.password = password;
 //        } else {

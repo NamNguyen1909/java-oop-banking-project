@@ -46,7 +46,7 @@ public class Customer extends Person {
         super.input();
 
         System.out.println("=>Dang ky khach hang moi thanh cong!!!");
-        Thread.sleep(1500);
+        Thread.sleep(1000);
     }
 
     public static String generateCustomerID() {
@@ -64,8 +64,8 @@ public class Customer extends Person {
 
     @Override
     public void display() {
-        System.out.printf("\n\tMa khach hang: %s", this.customerID);
         super.display();
+        System.out.printf("\tMa khach hang: %s", this.customerID);
     }
 
     public void displayAll() {
