@@ -18,37 +18,37 @@ public class Java_oop_banking_project {
     public static void main(String[] args) throws Exception {
         Bank bank = new Bank();
 
-        bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-        bank.readEmployeeAccountListFromFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
-
-        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
-        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
-        EAccount a1 = new EAccount(p1);
-        EAccount a2 = new EAccount(p2);
-
-        bank.addEmployee(p1, p2);
-        bank.addEmAcc(a1, a2);
-
-        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-        bank.writeEmployeeAccountListToFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
-
-        bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-        bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
-
-        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
-        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
-
-        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
-        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
-        bank.addCustomer(ct1, ct2);
-        bank.addUnlimitedAccount(at3, at4);
-
-        bank.displayCustomerList();
-        bank.displayEmployeeList();
-        bank.displayAccountList();
-
-        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
+//        bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+//        bank.readEmployeeAccountListFromFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
+//
+//        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
+//        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
+//        EAccount a1 = new EAccount(p1);
+//        EAccount a2 = new EAccount(p2);
+//
+//        bank.addEmployee(p1, p2);
+//        bank.addEmAcc(a1, a2);
+//
+//        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+//        bank.writeEmployeeAccountListToFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
+//
+//        bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+//        bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
+//
+//        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
+//        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
+//
+//        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
+//        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
+//        bank.addCustomer(ct1, ct2);
+//        bank.addUnlimitedAccount(at3, at4);
+//
+//        bank.displayCustomerList();
+//        bank.displayEmployeeList();
+//        bank.displayAccountList();
+//
+//        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+//        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
 
         int option;
         double amount;
@@ -217,7 +217,20 @@ public class Java_oop_banking_project {
                                     String matk = Configuration.sc.nextLine();
 
                                     boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
-
+                                    //phai tim trong 2 danh sach co ky han va khong ky han
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     for (Account a : bank.getAccountList()) {
                                         if (a.getUsername().equals(tentk) && a.getPassword().equals(matkhautk)) {
                                             bank.removeAccount(a);
@@ -289,9 +302,21 @@ public class Java_oop_banking_project {
 
                             switch (option) {
                                 case 1:
-                                    System.out.print("So tien muon gui: ");
-                                    amount = Float.parseFloat(Configuration.sc.nextLine());
-                                    bank.getSignedInAcc().deposit(amount);
+                                    System.out.print("Nhap ma tai khoan muon gui: ");
+                                    String ma = Configuration.sc.nextLine();
+                                    // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
+                                    Optional<Account> accFound = bank.getSignedInCustomer().getAccList().stream()
+                                            .filter(a -> a.getAccountID().equals(ma))
+                                            .findFirst();
+
+                                    if (accFound.isPresent()) {
+                                        System.out.print("So tien muon gui: ");
+                                        amount = Double.parseDouble(Configuration.sc.nextLine());
+                                        accFound.get().deposit(amount);
+                                    } else {
+                                        System.out.println("Khong tim thay tai khoan co ma: " + ma);
+                                    }
+
                                     break;
                                 case 2:
                                     //rut tien 
@@ -316,7 +341,7 @@ public class Java_oop_banking_project {
                 case 5:
                     bank.signOut();
                     bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-                    bank.writeAccountListToFile(bank.getAccountList(), "src/main/resources/accountList.txt");
+                    bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
                     System.out.println("\n\t=====Goodbye=====\n");
                     Thread.sleep(2500);
                     break;
