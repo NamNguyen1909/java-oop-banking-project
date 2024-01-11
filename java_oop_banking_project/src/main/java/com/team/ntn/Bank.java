@@ -222,7 +222,7 @@ public class Bank {
                 // Ghi thông tin của mỗi khách hàng vào tệp tin
                 writer.write(customer.getFullName() + ";"
                         + customer.getGender() + ";"
-                        + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ";" // Chuyển định dạng ngày
+                        + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)) + ";" // Chuyển định dạng ngày
                         + customer.getHometown() + ";"
                         + customer.getIDCard() + ";"
                         + customer.getCustomerID());
@@ -244,7 +244,6 @@ public class Bank {
                     String fullName = parts[0];
                     String gender = parts[1];
                     String dateOfBirth = parts[2];
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Định dạng mong muốn
                     String hometown = parts[3];
                     String IDCard = parts[4];
                     String customerID = (parts.length == 6) ? parts[5] : null;
@@ -273,7 +272,7 @@ public class Bank {
                 // Ghi thông tin của mỗi nhân viên vào tệp tin
                 writer.write(employee.getFullName() + ";"
                         + employee.getGender() + ";"
-                        + employee.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ";" // Chuyển định dạng ngày
+                        + employee.getDateOfBirth().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)) + ";" // Chuyển định dạng ngày
                         + employee.getHometown() + ";"
                         + employee.getIDCard() + ";"
                         + employee.getEmployeeID());
@@ -294,8 +293,7 @@ public class Bank {
                 if (parts.length == 5 || parts.length == 6) { // Kiểm tra có đủ thông tin hay không
                     String fullName = parts[0];
                     String gender = parts[1];
-                    String dateOfBirth = parts[2];
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy"); // Định dạng mong muốn
+                    String dateOfBirth = parts[2];                   
                     String hometown = parts[3];
                     String IDCard = parts[4];
                     String employeeID = (parts.length == 6) ? parts[5] : null;
