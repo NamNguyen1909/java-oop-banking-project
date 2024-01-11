@@ -4,6 +4,7 @@
 package com.team.java_oop_banking_project;
 
 import com.team.ntn.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class Java_oop_banking_project {
         bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
 
         int option;
-        float amount;
+        double amount;
         do {
             Bank.menu();
             do {
@@ -65,7 +66,7 @@ public class Java_oop_banking_project {
                     c1.display();
                     bank.addCustomer(c1);
 
-                    Account ac1 = new UnlimitedAccount(c1);
+                    UnlimitedAccount ac1 = new UnlimitedAccount(c1);
                     ac1.input();
                     ac1.display();
                     bank.addUnlimitedAccount(ac1);
@@ -106,14 +107,19 @@ public class Java_oop_banking_project {
                                 case 5:
                                     System.out.print("Nhap ma tai khoan muon gui: ");
                                     String ma = Configuration.sc.nextLine();
-                                    bank.getCustomerList()
+                                    // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
+                                    Optional<Account> accFound = bank.getSignedInCustomer().getAccList().stream()
+                                            .filter(a -> a.getAccountID().equals(ma))
+                                            .findFirst();
 
-                                    System.out.print("So tien muon gui: ");
-                                    amount = Float.parseFloat(Configuration.sc.nextLine());
-//                                    bank.getCustomerList().stream().filter(c -> c.equals(bank.getSignedInCustomer())).findFirst().get()
-//                                            .getAccList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
-//                                    bank.getAccountList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
-                                    bank.getSignedInPer().deposit(amount);
+                                    if (accFound.isPresent()) {
+                                        System.out.print("So tien muon gui: ");
+                                        amount = Double.parseDouble(Configuration.sc.nextLine());
+                                        accFound.get().deposit(amount);
+                                    } else {
+                                        System.out.println("Khong tim thay tai khoan co ma: " + ma);
+                                    }
+
                                     break;
 
                                 case 6:
@@ -156,30 +162,37 @@ public class Java_oop_banking_project {
                                     c2.display();
                                     bank.addCustomer(c2);
 
-                                    Account ac2 = new UnlimitedAccount(c2);
+                                    UnlimitedAccount ac2 = new UnlimitedAccount(c2);
                                     ac2.input();
                                     ac2.display();
-                                    bank.addAccount(ac2);
+                                    bank.addUnlimitedAccount(ac2);
                                     break;
                                 case 4:
                                     System.out.print("Nhap ma khach hang can xoa: ");
                                     String ss = Configuration.sc.nextLine();
-                                    // Tìm tài khoản của khách hàng cần xóa trong accountList
-                                    List<Account> accountsToDelete = bank.getAccountList().stream()
-                                            .filter(account -> account.getUsername().equals(ss))
-                                            .collect(Collectors.toList());
 
-                                    // Xóa tài khoản khỏi accountList
-                                    bank.getAccountList().removeAll(accountsToDelete);
-
-                                    // Tìm khách hàng cần xóa trong customerList
-                                    Optional<Customer> customerToDelete = bank.getCustomerList().stream()
+                                    // Tìm khách hàng cần xóa trong danh sách khách hàng
+                                    Customer customerToDelete = bank.getCustomerList().stream()
                                             .filter(customer -> customer.getCustomerID().equals(ss))
-                                            .findFirst();
+                                            .findFirst().orElse(null);
 
-                                    // Xóa khách hàng khỏi customerList
-                                    customerToDelete.ifPresent(customer -> bank.getCustomerList().remove(customer));
+                                    if (customerToDelete != null) {
+                                        // Tạo một danh sách mới để chứa các tài khoản cần xóa
+                                        List<Account> accountsToDelete = new ArrayList<>(customerToDelete.getAccList());
+
+                                        // Xóa tất cả các tài khoản của khách hàng khỏi danh sách chung
+                                        bank.getUnlimitedAccountList().removeAll(accountsToDelete);
+
+                                        // Xóa khách hàng khỏi danh sách khách hàng
+                                        bank.getCustomerList().remove(customerToDelete);
+
+                                        System.out.println("Xoa khach hang thanh cong.");
+                                    } else {
+                                        System.out.println("Khong tim thay khach hang co ma: " + ss);
+                                        // Thêm các thao tác bạn muốn thực hiện khi không tìm thấy khách hàng
+                                    }
                                     break;
+
                                 case 5:
                                     System.out.print("Them tai khoan cho khach hang co ma: ");
                                     String ma = Configuration.sc.nextLine();
@@ -200,10 +213,8 @@ public class Java_oop_banking_project {
                                     }
                                     break;
                                 case 6:
-                                    System.out.print("Nhap ten dang nhap cua tai khoan can xoa: ");
-                                    String tentk = Configuration.sc.nextLine();
-                                    System.out.print("Nhap mat khau cua tai khoan can xoa: ");
-                                    String matkhautk = Configuration.sc.nextLine();
+                                    System.out.print("Nhap ten ma cua tai khoan can xoa: ");
+                                    String matk = Configuration.sc.nextLine();
 
                                     boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
 
