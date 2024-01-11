@@ -18,30 +18,37 @@ public class Java_oop_banking_project {
         Bank bank = new Bank();
 
         bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-        bank.readEmAccListFromFile(bank.getEmAccList(), "src/main/resources/emAccList.txt");
-//        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890");
-//        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331");
-//        EAccount a1 = new EAccount(p1, "admin");
-//        EAccount a2 = new EAccount(p2, "admin");
-//
-//        bank.addEmployee(p1, p2);
-//        bank.addEmAcc(a1, a2);
-//
-//        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-//        bank.writeEmAccListToFile(bank.getEmAccList(), "src/main/resources/emAccList.txt");
+        bank.readEmployeeAccountListFromFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
+
+        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
+        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
+        EAccount a1 = new EAccount(p1);
+        EAccount a2 = new EAccount(p2);
+
+        bank.addEmployee(p1, p2);
+        bank.addEmAcc(a1, a2);
+
+        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+        bank.writeEmployeeAccountListToFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
 
         bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-        bank.readAccountListFromFile(bank.getAccountList(), "src/main/resources/accountList.txt");
+        bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
 
         Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
         Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
 
-        Account at3 = new UnlimitedAccount(ct2, 111111);
-        Account at4 = new UnlimitedAccount(ct2, 111001);
-        Account at5 = new UnlimitedAccount(ct1, 2222222);
-        Account at6 = new UnlimitedAccount(ct1, 2200222);
+        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
+        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
         bank.addCustomer(ct1, ct2);
-        bank.addAccount(at3, at4, at5, at6);
+        bank.addUnlimitedAccount(at3, at4);
+
+        bank.displayCustomerList();
+        bank.displayEmployeeList();
+        bank.displayAccountList();
+
+        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
+
         int option;
         float amount;
         do {
@@ -61,7 +68,7 @@ public class Java_oop_banking_project {
                     Account ac1 = new UnlimitedAccount(c1);
                     ac1.input();
                     ac1.display();
-                    bank.addAccount(ac1);
+                    bank.addUnlimitedAccount(ac1);
 
                     break;
 
@@ -90,20 +97,25 @@ public class Java_oop_banking_project {
                                     break;
                                 case 3:
                                     System.out.print("Nhap mat khau moi: ");
-                                    bank.getAccountList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().setPassword(Configuration.sc.nextLine());
+                                    bank.getCustomerList().stream().filter(a -> a.equals(bank.getSignedInPer())).findFirst().get().setPassword(Configuration.sc.nextLine());
                                     break;
                                 case 4:
                                     //tao tai khoan co ki han
 
                                     break;
                                 case 5:
+                                    System.out.print("Nhap ma tai khoan muon gui: ");
+                                    String ma = Configuration.sc.nextLine();
+                                    bank.getCustomerList()
+
                                     System.out.print("So tien muon gui: ");
                                     amount = Float.parseFloat(Configuration.sc.nextLine());
 //                                    bank.getCustomerList().stream().filter(c -> c.equals(bank.getSignedInCustomer())).findFirst().get()
 //                                            .getAccList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
 //                                    bank.getAccountList().stream().filter(a -> a.equals(bank.getSignedInAcc())).findFirst().get().deposit(amount);
-                                    bank.getSignedInAcc().deposit(amount);
+                                    bank.getSignedInPer().deposit(amount);
                                     break;
+
                                 case 6:
                                     //rut tien
 
@@ -300,4 +312,5 @@ public class Java_oop_banking_project {
             }
         } while (option != 5);
     }
+
 }

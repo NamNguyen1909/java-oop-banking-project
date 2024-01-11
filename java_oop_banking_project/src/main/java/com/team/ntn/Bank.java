@@ -25,11 +25,10 @@ public class Bank {
     private List<Customer> customerList = new ArrayList<>();
     private List<Employee> employeeList = new ArrayList<>();
 
-    private List<Account> accountList = new ArrayList<>();
-    private List<Account> emAccList = new ArrayList<>();
+    private List<UnlimitedAccount> unlimitedAccountList = new ArrayList<>();
+    private List<EAccount> employeeAccountList = new ArrayList<>();
 
     private Person signedInPer = null;
-    private Account signedInAcc = null;
 
     public Bank() {
     }
@@ -51,17 +50,17 @@ public class Bank {
         this.getEmployeeList().remove(employees);
     }
 
-    public void addAccount(Account... accounts) {
-        this.getAccountList().addAll(Arrays.asList(accounts));
+    public void addUnlimitedAccount(UnlimitedAccount... accounts) {
+        this.getUnlimitedAccountList().addAll(Arrays.asList(accounts));
     }
 
-    public void removeAccount(Account account) {
-        this.getAccountList().remove(account);
+    public void removeUnlimitedAccount(UnlimitedAccount account) {
+        this.getUnlimitedAccountList().remove(account);
         //so sanh bang equals nen phai override equals
     }
 
     public void addEmAcc(EAccount... accounts) {
-        this.getEmAccList().addAll(Arrays.asList(accounts));
+        this.getEmployeeAccountList().addAll(Arrays.asList(accounts));
     }
 
     public void displayCustomerList() {
@@ -79,7 +78,7 @@ public class Bank {
     public void displayAccountList() {
         System.out.println("\nDanh sach tai khoan: ");
 
-        this.getAccountList().forEach(u -> u.display());
+        this.getUnlimitedAccountList().forEach(u -> u.display());
     }
 
     //Tra cứu khách hàng theo họ tên và mã số khách hàng.
@@ -173,24 +172,22 @@ public class Bank {
         // Tạo một biến để lưu thông tin đăng nhập
         Person signedInPerson = null;
 
-        for (Account account : this.getAccountList()) {
-            if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
+        for (Customer customer : this.getCustomerList()) {
+            if (customer.getUsername().equals(username) && customer.getPassword().equals(password)) {
                 // Lưu thông tin của người đăng nhập
-                signedInPerson = account.getUser();
-                setSignedInAcc(account);
-                System.out.println("Dang nhap thanh cong, Chao mung " + account.getUser().getFullName());
+                signedInPerson = customer;
+                System.out.println("Dang nhap thanh cong, Chao mung " + customer.getFullName());
                 break;
             }
         }
 
-        // Nếu không tìm thấy trong accountList, kiểm tra trong emAccList
+        // Nếu không tìm thấy trong customerList, kiểm tra trong employeeList
         if (signedInPerson == null) {
-            for (Account emAccount : this.getEmAccList()) {
-                if (emAccount.getUsername().equals(username) && emAccount.getPassword().equals(password)) {
+            for (Employee employee : this.getEmployeeList()) {
+                if (employee.getUsername().equals(username) && employee.getPassword().equals(password)) {
                     // Lưu thông tin của người đăng nhập
-                    signedInPerson = emAccount.getUser();
-                    setSignedInAcc(emAccount);
-                    System.out.println("Dang nhap thanh cong, Chao mung " + emAccount.getUser().getFullName());
+                    signedInPerson = employee;
+                    System.out.println("Dang nhap thanh cong, Chao mung " + employee.getFullName());
                     break;
                 }
             }
@@ -210,13 +207,11 @@ public class Bank {
     }
 
     public void signOut() {
-        this.setSignedInAcc(null);
         this.setSignedInPer(null);
     }
     //---------------------------------------------------------------------------
 
     public void writeCustomerListToFile(List<Customer> customerList, String filePath) {
-        //,false de khong ghi tiep ma ghi de
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (Customer customer : customerList) {
                 // Ghi thông tin của mỗi khách hàng vào tệp tin
@@ -225,7 +220,9 @@ public class Bank {
                         + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)) + ";" // Chuyển định dạng ngày
                         + customer.getHometown() + ";"
                         + customer.getIDCard() + ";"
-                        + customer.getCustomerID());
+                        + customer.getCustomerID() + ";"
+                        + customer.getUsername() + ";"
+                        + customer.getPassword());
                 writer.newLine();
             }
             System.out.println("Danh sach khach hang da duoc ghi vao file.");
@@ -240,22 +237,18 @@ public class Bank {
             while ((line = reader.readLine()) != null) {
                 // Tách thông tin từ dòng đọc được
                 String[] parts = line.split(";");
-                if (parts.length == 5 || parts.length == 6) { // Kiểm tra có đủ thông tin hay không
+                if (parts.length == 8) { // Kiểm tra có đủ thông tin hay không
                     String fullName = parts[0];
                     String gender = parts[1];
                     String dateOfBirth = parts[2];
                     String hometown = parts[3];
                     String IDCard = parts[4];
-                    String customerID = (parts.length == 6) ? parts[5] : null;
+                    String customerID = parts[5];
+                    String username = parts[6];
+                    String password = parts[7];
 
                     // Tạo đối tượng Customer và thêm vào danh sách
-                    Customer customer = new Customer(fullName, gender, dateOfBirth, hometown, IDCard);
-
-                    // Nếu customerID được đặt trong file, thiết lập cho đối tượng Customer
-                    if (customerID != null && !customerID.isEmpty()) {
-                        customer.setCustomerID(customerID);
-                    }
-
+                    Customer customer = new Customer(fullName, gender, dateOfBirth, hometown, IDCard, customerID, username, password);
                     customerList.add(customer);
                 }
             }
@@ -275,7 +268,9 @@ public class Bank {
                         + employee.getDateOfBirth().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)) + ";" // Chuyển định dạng ngày
                         + employee.getHometown() + ";"
                         + employee.getIDCard() + ";"
-                        + employee.getEmployeeID());
+                        + employee.getEmployeeID() + ";"
+                        + employee.getUsername() + ";"
+                        + employee.getPassword());
                 writer.newLine();
             }
             System.out.println("Danh sach nhan vien da duoc ghi vao file.");
@@ -290,21 +285,18 @@ public class Bank {
             while ((line = reader.readLine()) != null) {
                 // Tách thông tin từ dòng đọc được
                 String[] parts = line.split(";");
-                if (parts.length == 5 || parts.length == 6) { // Kiểm tra có đủ thông tin hay không
+                if (parts.length == 8) { // Kiểm tra có đủ thông tin hay không
                     String fullName = parts[0];
                     String gender = parts[1];
-                    String dateOfBirth = parts[2];                   
+                    String dateOfBirth = parts[2];
                     String hometown = parts[3];
                     String IDCard = parts[4];
-                    String employeeID = (parts.length == 6) ? parts[5] : null;
+                    String employeeID = parts[5];
+                    String username = parts[6];
+                    String password = parts[7];
 
                     // Tạo đối tượng Employee và thêm vào danh sách
-                    Employee employee = new Employee(fullName, gender, dateOfBirth, hometown, IDCard);
-
-                    // Nếu employeeID được đặt trong file, thiết lập cho đối tượng Employee
-                    if (employeeID != null && !employeeID.isEmpty()) {
-                        employee.setEmployeeID(employeeID);
-                    }
+                    Employee employee = new Employee(fullName, gender, dateOfBirth, hometown, IDCard, employeeID, username, password);
 
                     employeeList.add(employee);
                 }
@@ -315,62 +307,12 @@ public class Bank {
         }
     }
 
-    public void writeAccountListToFile(List<Account> accountList, String filePath) {
+    public void writeEmployeeAccountListToFile(List<EAccount> employeeAccountList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-            for (Account account : accountList) {
-                // Ghi thông tin của mỗi tài khoản vào tệp tin
-                writer.write(account.getUsername() + ";"
-                        + account.getPassword() + ";"
-                        + account.getBalance());
-                writer.newLine();
-            }
-            System.out.println("Danh sach tai khoan da duoc ghi vao file.");
-        } catch (IOException e) {
-            System.err.println("Loi khi ghi danh sach tai khoan vao file: " + e.getMessage());
-        }
-    }
-
-    public void readAccountListFromFile(List<Account> accountList, String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Tách thông tin từ dòng đọc được
-                String[] parts = line.split(";");
-                if (parts.length == 3) { // Kiểm tra có đủ thông tin hay không
-                    String username = parts[0];
-                    String password = parts[1];
-                    float balance = Float.parseFloat(parts[2]);
-
-                    // Tìm customer có customerId giống với username
-                    Customer customer = this.getCustomerList()
-                            .stream()
-                            .filter(c -> c.getCustomerID().equals(username))
-                            .findFirst()
-                            .orElse(null);
-                    if (customer != null) {
-                        Account account = new Account(customer);
-                        account.setUsername(username);
-                        account.setPassword(password);
-                        account.setBalance(balance);
-                        accountList.add(account);
-                    } else {
-                        System.out.println("Khong tim thay khach hang ung voi ID: " + username);
-                    }
-
-                }
-            }
-            System.out.println("Danh sach tai khoan da duoc doc tu file.");
-        } catch (Exception e) {
-            System.err.println("Loi khi doc danh sach tai khoan tu file: " + e.getMessage());
-        }
-    }
-
-    public void writeEmAccListToFile(List<Account> emAccList, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-            for (Account emAccount : emAccList) {
-                // Ghi thông tin của mỗi tài khoản của nhân viên vào tệp tin
-                writer.write(emAccount.getUsername() + ";"
-                        + emAccount.getPassword());
+            for (EAccount employeeAccount : employeeAccountList) {
+                // Ghi thông tin của mỗi tài khoản nhân viên vào tệp tin
+                writer.write(employeeAccount.getAccountID() + ";"
+                        + employeeAccount.getUser().getEmployeeID());
                 writer.newLine();
             }
             System.out.println("Danh sach tai khoan nhan vien da duoc ghi vao file.");
@@ -379,36 +321,92 @@ public class Bank {
         }
     }
 
-    public void readEmAccListFromFile(List<Account> emAccList, String filePath) {
+    public void readEmployeeAccountListFromFile(List<EAccount> employeeAccountList, String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Tách thông tin từ dòng đọc được
                 String[] parts = line.split(";");
                 if (parts.length == 2) { // Kiểm tra có đủ thông tin hay không
-                    String username = parts[0];
-                    String password = parts[1];
+                    String accountID = parts[0];
+                    String employeeID = parts[1];
 
-                    Employee employee = this.getEmployeeList()
-                            .stream()
-                            .filter(e -> e.getEmployeeID().equals(username))
-                            .findFirst().orElse(null);
+                    // Tìm nhân viên trong danh sách nhân viên
+                    Employee employee = getEmployeeByID(employeeID);
+
                     if (employee != null) {
                         // Tạo đối tượng EAccount và thêm vào danh sách
-                        EAccount emAccount = new EAccount(employee, password);
-                        emAccount.setUsername(username);
-
-                        emAccList.add(emAccount);
-                    } else {
-                        System.out.println("Khong tim thay nhan vien ung voi ID: " + username);
+                        EAccount employeeAccount = new EAccount(employee, accountID);
+                        employeeAccountList.add(employeeAccount);
                     }
-
                 }
             }
             System.out.println("Danh sach tai khoan nhan vien da duoc doc tu file.");
         } catch (Exception e) {
             System.err.println("Loi khi doc danh sach tai khoan nhan vien tu file: " + e.getMessage());
         }
+    }
+
+// Helper method to get Employee by ID
+    private Employee getEmployeeByID(String employeeID) {
+        for (Employee employee : this.getEmployeeList()) {
+            if (employee.getEmployeeID().equals(employeeID)) {
+                return employee;
+            }
+        }
+        return null;
+    }
+
+    public void writeUnlimitedAccountListToFile(List<UnlimitedAccount> unlimitedAccountList, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+            for (UnlimitedAccount account : unlimitedAccountList) {
+                // Ghi thông tin của mỗi tài khoản UnlimitedAccount vào tệp tin
+                writer.write(account.getAccountID() + ";"
+                        + account.getUser().getCustomerID() + ";"
+                        + account.getBalance());
+                writer.newLine();
+            }
+            System.out.println("Danh sach tai khoan UnlimitedAccount da duoc ghi vao file.");
+        } catch (IOException e) {
+            System.err.println("Loi khi ghi danh sach tai khoan UnlimitedAccount vao file: " + e.getMessage());
+        }
+    }
+
+    public void readUnlimitedAccountListFromFile(List<UnlimitedAccount> unlimitedAccountList, String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Tách thông tin từ dòng đọc được
+                String[] parts = line.split(";");
+                if (parts.length == 3) { // Kiểm tra có đủ thông tin hay không
+                    String accountID = parts[0];
+                    String customerID = parts[1];
+                    double balance = Double.parseDouble(parts[2]);
+
+                    // Tìm khách hàng trong danh sách khách hàng
+                    Customer customer = getCustomerByID(customerID);
+
+                    if (customer != null) {
+                        // Tạo đối tượng UnlimitedAccount và thêm vào danh sách
+                        UnlimitedAccount unlimitedAccount = new UnlimitedAccount(customer, balance, accountID);
+                        unlimitedAccountList.add(unlimitedAccount);
+                    }
+                }
+            }
+            System.out.println("Danh sach tai khoan UnlimitedAccount da duoc doc tu file.");
+        } catch (Exception e) {
+            System.err.println("Loi khi doc danh sach tai khoan UnlimitedAccount tu file: " + e.getMessage());
+        }
+    }
+
+// Helper method to get Customer by ID
+    private Customer getCustomerByID(String customerID) {
+        for (Customer customer : this.getCustomerList()) {
+            if (customer.getCustomerID().equals(customerID)) {
+                return customer;
+            }
+        }
+        return null;
     }
 
     //---------------------------------------------------------------------------
@@ -441,31 +439,31 @@ public class Bank {
     }
 
     /**
-     * @return the accountList
+     * @return the unlimitedAccountList
      */
-    public List<Account> getAccountList() {
-        return accountList;
+    public List<UnlimitedAccount> getUnlimitedAccountList() {
+        return unlimitedAccountList;
     }
 
     /**
-     * @param accountList the accountList to set
+     * @param accountList the unlimitedAccountList to set
      */
-    public void setAccountList(List<Account> accountList) {
-        this.accountList = accountList;
+    public void setUnlimitedAccountList(List<UnlimitedAccount> accountList) {
+        this.unlimitedAccountList = accountList;
     }
 
     /**
-     * @return the emAccList
+     * @return the employeeAccountList
      */
-    public List<Account> getEmAccList() {
-        return emAccList;
+    public List<EAccount> getEmployeeAccountList() {
+        return employeeAccountList;
     }
 
     /**
-     * @param emAccList the emAccList to set
+     * @param employeeAccountList the employeeAccountList to set
      */
-    public void setEmAccList(List<Account> emAccList) {
-        this.emAccList = emAccList;
+    public void setEmployeeAccountList(List<EAccount> employeeAccountList) {
+        this.employeeAccountList = employeeAccountList;
     }
 
     /**
@@ -514,20 +512,6 @@ public class Bank {
      */
     public void setSignedIn(Employee signedIn) {
         this.signedInPer = signedIn;
-    }
-
-    /**
-     * @return the signedInAcc
-     */
-    public Account getSignedInAcc() {
-        return signedInAcc;
-    }
-
-    /**
-     * @param signedInAcc the signedInAcc to set
-     */
-    public void setSignedInAcc(Account signedInAcc) {
-        this.signedInAcc = signedInAcc;
     }
 
 }

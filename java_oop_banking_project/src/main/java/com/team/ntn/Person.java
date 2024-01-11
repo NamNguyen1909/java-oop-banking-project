@@ -224,4 +224,12 @@ public class Person {
             throw new Exception("CCCD khong hop le!\n");
         }
     }
+
+    public String getEmployeeID() {
+        return null;
+    }
+    
+    public String getCustomerID() {
+        return null;
+    }
 }

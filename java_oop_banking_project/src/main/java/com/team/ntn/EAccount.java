@@ -8,23 +8,20 @@ package com.team.ntn;
  *
  * @author THANH_NAM
  */
-public class EAccount extends Account{
+public class EAccount extends Account {
 
-    public EAccount(Employee e, String pass) {
+    private static int count;
+
+    public EAccount(Employee e) {
         super(e);
-        this.username=e.getEmployeeID();
-        this.password=pass;
         e.addAcc(this);
+        setAccountID(generateAccountId());
     }
 
-
-    
-
-    
-    @Override
-    public void display() {
-        System.out.printf("\nUsername: %s \t\tPassword: %s",this.username, this.password);
-        System.out.println("\n----------------------------------------------------------------------------");
+    public EAccount(Employee e, String accountID) {
+        super(e);
+        e.addAcc(this);
+        setAccountID(accountID);
     }
-    
+
 }

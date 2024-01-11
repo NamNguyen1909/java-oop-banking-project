@@ -12,10 +12,12 @@ import java.util.Objects;
  */
 public class UnlimitedAccount extends Account {
 
+    private static int count;
     private double balance;
 
     public UnlimitedAccount(Customer customer) {
         super(customer);
+        setAccountID(generateAccountId());
     }
 
     public UnlimitedAccount(Customer customer, double balance) throws Exception {
@@ -25,40 +27,34 @@ public class UnlimitedAccount extends Account {
         } else {
             throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
         }
+        setAccountID(generateAccountId());
+    }
 
-        this.password = initPassword();
+    public UnlimitedAccount(Customer customer, double balance, String accountId) throws Exception {
+        super(customer);
+        if (balance >= 100000) {
+            setBalance(balance);
+        } else {
+            throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+        }
+        setAccountID(accountId);
     }
 
     @Override
-    public void display()  {
+    public void display() {
         super.display();
-        System.out.printf("\nSo du: %.1f",this.balance);
+        System.out.printf("\tSo du: %.1f", this.balance);
         System.out.println("\n----------------------------------------------------------------------------");
     }
-    
-    
 
     @Override
     public void input() throws InterruptedException {
         System.out.println("\n\n~~~~~Nhap tai khoan ");
-
-        setUsername(this.user.getUserId());
-        this.password = initPassword();
-        System.out.printf("Username: %s\t\tPassword: %s\n", this.username, this.password);
-
-        //doi mat khau sau
-        //vong lap nhap+check mat khau
-//        String pass;
-//        do {
-//            System.out.print("Password: ");
-//            pass = Configuration.sc.nextLine();
-//            setPassword(pass);
-//        } while (!isStrongPassword(pass));
-        //vong lap check so tien 
+        super.display();
         float soTien;
         do {
             try {
-                System.out.print("So tien gui: ");
+                System.out.print("\nSo tien gui: ");
                 soTien = Float.parseFloat(Configuration.sc.nextLine());
                 if (soTien >= 100000) {
                     setBalance(soTien);
@@ -114,15 +110,16 @@ public class UnlimitedAccount extends Account {
 
         // So sánh các thuộc tính quan trọng
         return Double.compare(otherAccount.balance, balance) == 0
-                && Objects.equals(username, otherAccount.username)
-                && Objects.equals(password, otherAccount.password);
+                && Objects.equals(accountID, otherAccount.accountID);
     }
 
     @Override
     public int hashCode() {
         // Tạo mã băm dựa trên các thuộc tính quan trọng
-        return Objects.hash(balance, username, password);
+        return Objects.hash(balance, accountID);
     }
+    
+
 
     /**
      * @return the balance
