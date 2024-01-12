@@ -29,7 +29,6 @@ public class Bank {
     private List<UnlimitedAccount> unlimitedAccountList = new ArrayList<>();
     private List<TaiKhoanCoKyHan> taiKhoanCoKyHanList = new ArrayList<>();
 
-    private List<EAccount> employeeAccountList = new ArrayList<>();
 
     private Person signedInPer = null;
 
@@ -66,9 +65,6 @@ public class Bank {
         //so sanh bang equals nen phai override equals
     }
 
-    public void addEmAcc(EAccount... accounts) {
-        this.getEmployeeAccountList().addAll(Arrays.asList(accounts));
-    }
 
     public void displayCustomerList() {
         System.out.println("\nDanh sach khach hang : ");
@@ -331,55 +327,15 @@ public class Bank {
         }
     }
 
-    public void writeEmployeeAccountListToFile(List<EAccount> employeeAccountList, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-            for (EAccount employeeAccount : employeeAccountList) {
-                // Ghi thông tin của mỗi tài khoản nhân viên vào tệp tin
-                writer.write(employeeAccount.getAccountID() + ";"
-                        + employeeAccount.getUser().getEmployeeID());
-                writer.newLine();
-            }
-            System.out.println("Danh sach tai khoan nhan vien da duoc ghi vao file.");
-        } catch (IOException e) {
-            System.err.println("Loi khi ghi danh sach tai khoan nhan vien vao file: " + e.getMessage());
-        }
-    }
-
-    public void readEmployeeAccountListFromFile(List<EAccount> employeeAccountList, String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Tách thông tin từ dòng đọc được
-                String[] parts = line.split(";");
-                if (parts.length == 2) { // Kiểm tra có đủ thông tin hay không
-                    String accountID = parts[0];
-                    String employeeID = parts[1];
-
-                    // Tìm nhân viên trong danh sách nhân viên
-                    Employee employee = getEmployeeByID(employeeID);
-
-                    if (employee != null) {
-                        // Tạo đối tượng EAccount và thêm vào danh sách
-                        EAccount employeeAccount = new EAccount(employee, accountID);
-                        employeeAccountList.add(employeeAccount);
-                    }
-                }
-            }
-            System.out.println("Danh sach tai khoan nhan vien da duoc doc tu file.");
-        } catch (Exception e) {
-            System.err.println("Loi khi doc danh sach tai khoan nhan vien tu file: " + e.getMessage());
-        }
-    }
-
-// Helper method to get Employee by ID
-    private Employee getEmployeeByID(String employeeID) {
-        for (Employee employee : this.getEmployeeList()) {
-            if (employee.getEmployeeID().equals(employeeID)) {
-                return employee;
-            }
-        }
-        return null;
-    }
+//// Helper method to get Employee by ID
+//    private Employee getEmployeeByID(String employeeID) {
+//        for (Employee employee : this.getEmployeeList()) {
+//            if (employee.getEmployeeID().equals(employeeID)) {
+//                return employee;
+//            }
+//        }
+//        return null;
+//    }
 
     public void writeUnlimitedAccountListToFile(List<UnlimitedAccount> unlimitedAccountList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
@@ -474,20 +430,6 @@ public class Bank {
      */
     public void setUnlimitedAccountList(List<UnlimitedAccount> accountList) {
         this.unlimitedAccountList = accountList;
-    }
-
-    /**
-     * @return the employeeAccountList
-     */
-    public List<EAccount> getEmployeeAccountList() {
-        return employeeAccountList;
-    }
-
-    /**
-     * @param employeeAccountList the employeeAccountList to set
-     */
-    public void setEmployeeAccountList(List<EAccount> employeeAccountList) {
-        this.employeeAccountList = employeeAccountList;
     }
 
     /**

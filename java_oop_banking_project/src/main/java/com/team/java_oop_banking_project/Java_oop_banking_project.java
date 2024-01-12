@@ -19,37 +19,33 @@ public class Java_oop_banking_project {
     public static void main(String[] args) throws Exception {
         Bank bank = new Bank();
 
-//        bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-//        bank.readEmployeeAccountListFromFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
-//
-//        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
-//        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
-//        EAccount a1 = new EAccount(p1);
-//        EAccount a2 = new EAccount(p2);
-//
-//        bank.addEmployee(p1, p2);
-//        bank.addEmAcc(a1, a2);
-//
-//        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-//        bank.writeEmployeeAccountListToFile(bank.getEmployeeAccountList(), "src/main/resources/emAccList.txt");
-//
-//        bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-//        bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
-//
-//        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
-//        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
-//
-//        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
-//        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
-//        bank.addCustomer(ct1, ct2);
-//        bank.addUnlimitedAccount(at3, at4);
-//
-//        bank.displayCustomerList();
-//        bank.displayEmployeeList();
-//        bank.displayAccountList();
-//
-//        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-//        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
+        bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+
+        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
+        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
+
+
+        bank.addEmployee(p1, p2);
+
+        bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
+
+        bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+        bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
+
+        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
+        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
+
+        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
+        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
+        bank.addCustomer(ct1, ct2);
+        bank.addUnlimitedAccount(at3, at4);
+
+        bank.displayCustomerList();
+        bank.displayEmployeeList();
+        bank.displayAccountList();
+
+        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
+        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
         int option;
         double amount;
         do {
@@ -105,6 +101,7 @@ public class Java_oop_banking_project {
 
                                     TaiKhoanCoKyHan taiKhoan = new TaiKhoanCoKyHan(bank.getSignedInCustomer());
                                     taiKhoan.input();
+                                    taiKhoan.display();
                                     bank.addTaiKhoanCoKyHan(taiKhoan);
                                     break;
                                 case 5:

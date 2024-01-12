@@ -16,7 +16,6 @@ public class Employee extends Person {
 
     private static int count;
     private String employeeID;
-    private EAccount employeeAccount;
     private String username;
     private String password;
 
@@ -37,15 +36,10 @@ public class Employee extends Person {
         this.password = password;
     }
 
-    public void addAcc(EAccount a) {
-        setEmployeeAccount(a);
-    }
-
     @Override
     public void display() {
         super.display();
         System.out.printf("\nMa nhan vien: %s \nUsername: %s\tPassword: %s", this.employeeID, this.username, this.password);
-        this.employeeAccount.display();
     }
 
     @Override
@@ -79,20 +73,6 @@ public class Employee extends Person {
      */
     public void setEmployeeID(String eployeeID) {
         this.employeeID = eployeeID;
-    }
-
-    /**
-     * @return the employeeAccount
-     */
-    public EAccount getEmployeeAccount() {
-        return employeeAccount;
-    }
-
-    /**
-     * @param employeeAccount the employeeAccount to set
-     */
-    public void setEmployeeAccount(EAccount employeeAccount) {
-        this.employeeAccount = employeeAccount;
     }
 
     /**
