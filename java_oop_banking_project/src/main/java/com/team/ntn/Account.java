@@ -44,7 +44,7 @@ public class Account {
     public void withdraw(double amount) {
     }
 
-    public void tinhTienLai() {
+    public void calculateInterest() {
     }
 
     @Override

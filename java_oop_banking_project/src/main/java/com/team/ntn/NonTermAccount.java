@@ -123,7 +123,7 @@ public class NonTermAccount extends Account {
     }
 
     @Override
-    public void tinhTienLai() {
+    public void calculateInterest() {
         System.out.printf("--> So tien hien tai: %.1f\n", this.balance);
         System.out.printf("--> Tien lai sau 1 nam: %.1f\n", this.balance * 0.002);
     }

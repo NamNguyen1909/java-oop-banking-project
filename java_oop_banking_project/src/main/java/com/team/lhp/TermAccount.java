@@ -159,7 +159,7 @@ public class TermAccount extends Account {
     }
 
     @Override
-    public void tinhTienLai() {
+    public void calculateInterest() {
         LocalDate currentDate = LocalDate.now();
         double tienLaiDenNgayHienTai = this.getBalance() * 0.002;
         LocalDate maturityDate = this.dueDate;
@@ -172,11 +172,11 @@ public class TermAccount extends Account {
         System.out.printf("\t+ Tien lai vao ngay dao han: %.1f\n", tienLaiVaoNgayDaoHan);
     }
 
-    public boolean isDaoHan() {
+    public boolean isPastDue() {
         return this.dueDate.equals(LocalDate.now());
     }
 
-    public void capNhatDaoHan() {
+    public void updateDueDate() {
         this.dueDate = this.term.calculateMaturityDate(this.dueDate);
     }
 

@@ -29,8 +29,8 @@ public class Java_oop_banking_project {
         bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
 
         bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-        bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
-        bank.readTermAccountListFromFile(bank.getTaiKhoanCoKyHanList(), "src/main/resources/termAccountList.txt");
+        bank.readUnlimitedAccountListFromFile(bank.getNonTermAccountList(), "src/main/resources/unlimitedAccountList.txt");
+        bank.readTermAccountListFromFile(bank.getTermAccountList(), "src/main/resources/termAccountList.txt");
 
 //        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
 //        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
@@ -38,7 +38,7 @@ public class Java_oop_banking_project {
 //        NonTermAccount at3 = new NonTermAccount(ct2, 111111);
 //        NonTermAccount at4 = new NonTermAccount(ct2, 111001);
 //        bank.addCustomer(ct1, ct2);
-//        bank.addUnlimitedAccount(at3, at4);
+//        bank.addNonTermAccount(at3, at4);
 //
 //        bank.displayCustomerList();
 //        bank.displayEmployeeList();
@@ -63,7 +63,7 @@ public class Java_oop_banking_project {
                     NonTermAccount ac1 = new NonTermAccount(c1);
                     ac1.input();
                     ac1.display();
-                    bank.addUnlimitedAccount(ac1);
+                    bank.addNonTermAccount(ac1);
 
                     break;
 
@@ -101,7 +101,7 @@ public class Java_oop_banking_project {
                                     TermAccount taiKhoan = new TermAccount(bank.getSignedInCustomer());
                                     taiKhoan.input();
                                     taiKhoan.display();
-                                    bank.addTaiKhoanCoKyHan(taiKhoan);
+                                    bank.addTermAccount(taiKhoan);
                                     break;
                                 case 5:
                                     bank.getSignedInCustomer().getAccList().forEach(a -> a.display());
@@ -190,7 +190,7 @@ public class Java_oop_banking_project {
                                             .findFirst();
 
                                     if (taiKhoanTinhLaiTimThay.isPresent()) {
-                                        taiKhoanTinhLaiTimThay.get().tinhTienLai();
+                                        taiKhoanTinhLaiTimThay.get().calculateInterest();
                                     } else {
                                         System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanTinhLai);
                                     }
@@ -230,7 +230,7 @@ public class Java_oop_banking_project {
                                     NonTermAccount ac2 = new NonTermAccount(c2);
                                     ac2.input();
                                     ac2.display();
-                                    bank.addUnlimitedAccount(ac2);
+                                    bank.addNonTermAccount(ac2);
                                     break;
                                 case 4:
                                     System.out.print("Nhap ma khach hang can xoa: ");
@@ -246,7 +246,7 @@ public class Java_oop_banking_project {
                                         List<Account> accountsToDelete = new ArrayList<>(customerToDelete.getAccList());
 
                                         // Xóa tất cả các tài khoản của khách hàng khỏi danh sách chung
-                                        bank.getUnlimitedAccountList().removeAll(accountsToDelete);
+                                        bank.getNonTermAccountList().removeAll(accountsToDelete);
 
                                         // Xóa khách hàng khỏi danh sách khách hàng
                                         bank.getCustomerList().remove(customerToDelete);
@@ -270,7 +270,7 @@ public class Java_oop_banking_project {
                                             TermAccount taiKhoan = new TermAccount(bank.getSignedInCustomer());
                                             taiKhoan.input();
                                             taiKhoan.display();
-                                            bank.addTaiKhoanCoKyHan(taiKhoan);
+                                            bank.addTermAccount(taiKhoan);
                                             break;
                                         }
                                     }
@@ -280,16 +280,16 @@ public class Java_oop_banking_project {
                                     }
                                     break;
                                 case 6:
-                                    bank.getUnlimitedAccountList().forEach(a -> a.display());
-                                    bank.getTaiKhoanCoKyHanList().forEach(a -> a.display());
+                                    bank.getNonTermAccountList().forEach(a -> a.display());
+                                    bank.getTermAccountList().forEach(a -> a.display());
                                     System.out.print("Nhap ten ma cua tai khoan can xoa: ");
                                     String matk = Configuration.sc.nextLine();
 
                                     boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
 
-                                    for (Account a : bank.getUnlimitedAccountList()) {
+                                    for (Account a : bank.getNonTermAccountList()) {
                                         if (a.getAccountID().equals(matk)) {
-                                            bank.getUnlimitedAccountList().remove(a);
+                                            bank.getNonTermAccountList().remove(a);
                                             found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
                                             System.out.println("==> Xoa thanh cong");
                                             break;
@@ -297,9 +297,9 @@ public class Java_oop_banking_project {
                                     }
 
                                     if (!found) {
-                                        for (Account a : bank.getTaiKhoanCoKyHanList()) {
+                                        for (Account a : bank.getTermAccountList()) {
                                             if (a.getAccountID().equals(matk)) {
-                                                bank.getTaiKhoanCoKyHanList().remove(a);
+                                                bank.getTermAccountList().remove(a);
                                                 found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
                                                 System.out.println("==> Xoa thanh cong");
                                                 break;
@@ -466,7 +466,7 @@ public class Java_oop_banking_project {
                                 .findFirst();
 
                         if (taiKhoanTinhLaiTimThay.isPresent()) {
-                            taiKhoanTinhLaiTimThay.get().tinhTienLai();
+                            taiKhoanTinhLaiTimThay.get().calculateInterest();
                         } else {
                             System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanTinhLai);
                         }
@@ -475,8 +475,8 @@ public class Java_oop_banking_project {
                 case 5:
                     bank.signOut();
                     bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-                    bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
-                    bank.writeTermAccountListToFile(bank.getTaiKhoanCoKyHanList(), "src/main/resources/termAccountList.txt");
+                    bank.writeUnlimitedAccountListToFile(bank.getNonTermAccountList(), "src/main/resources/unlimitedAccountList.txt");
+                    bank.writeTermAccountListToFile(bank.getTermAccountList(), "src/main/resources/termAccountList.txt");
 
                     System.out.println("\n\t=====Goodbye=====\n");
                     Thread.sleep(2500);

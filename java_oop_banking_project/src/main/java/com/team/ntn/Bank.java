@@ -27,8 +27,8 @@ public class Bank {
     private List<Customer> customerList = new ArrayList<>();
     private List<Employee> employeeList = new ArrayList<>();
 
-    private List<NonTermAccount> unlimitedAccountList = new ArrayList<>();
-    private List<TermAccount> taiKhoanCoKyHanList = new ArrayList<>();
+    private List<NonTermAccount> nonTermAccountList = new ArrayList<>();
+    private List<TermAccount> termAccountList = new ArrayList<>();
 
     private Person signedInPer = null;
 
@@ -52,16 +52,16 @@ public class Bank {
         this.getEmployeeList().remove(employees);
     }
 
-    public void addUnlimitedAccount(NonTermAccount... accounts) {
-        this.getUnlimitedAccountList().addAll(Arrays.asList(accounts));
+    public void addNonTermAccount(NonTermAccount... accounts) {
+        this.getNonTermAccountList().addAll(Arrays.asList(accounts));
     }
 
-    public void addTaiKhoanCoKyHan(TermAccount... accounts) {
-        this.getTaiKhoanCoKyHanList().addAll(Arrays.asList(accounts));
+    public void addTermAccount(TermAccount... accounts) {
+        this.getTermAccountList().addAll(Arrays.asList(accounts));
     }
 
-    public void removeUnlimitedAccount(NonTermAccount account) {
-        this.getUnlimitedAccountList().remove(account);
+    public void removeNonTermAccount(NonTermAccount account) {
+        this.getNonTermAccountList().remove(account);
         //so sanh bang equals nen phai override equals
     }
 
@@ -80,7 +80,7 @@ public class Bank {
     public void displayAccountList() {
         System.out.println("\nDanh sach tai khoan: ");
 
-        this.getUnlimitedAccountList().forEach(u -> u.display());
+        this.getNonTermAccountList().forEach(u -> u.display());
     }
 
     //Tra cứu khách hàng theo họ tên và mã số khách hàng.
@@ -214,14 +214,14 @@ public class Bank {
 
     int loaiTaiKhoan(String soTaiKhoan) {
         // Duyệt qua danh sách ClassA
-        for (NonTermAccount objA : unlimitedAccountList) {
+        for (NonTermAccount objA : nonTermAccountList) {
             if (objA.user.IDCard.equals(soTaiKhoan)) {
                 return 1;
             }
         }
 
         // Duyệt qua danh sách ClassB
-        for (TermAccount objB : getTaiKhoanCoKyHanList()) {
+        for (TermAccount objB : getTermAccountList()) {
             if (objB.user.IDCard.equals(soTaiKhoan)) {
                 return 2;
             }
@@ -467,17 +467,17 @@ public class Bank {
     }
 
     /**
-     * @return the unlimitedAccountList
+     * @return the nonTermAccountList
      */
-    public List<NonTermAccount> getUnlimitedAccountList() {
-        return unlimitedAccountList;
+    public List<NonTermAccount> getNonTermAccountList() {
+        return nonTermAccountList;
     }
 
     /**
-     * @param accountList the unlimitedAccountList to set
+     * @param accountList the nonTermAccountList to set
      */
-    public void setUnlimitedAccountList(List<NonTermAccount> accountList) {
-        this.unlimitedAccountList = accountList;
+    public void setNonTermAccountList(List<NonTermAccount> accountList) {
+        this.nonTermAccountList = accountList;
     }
 
     /**
@@ -529,17 +529,17 @@ public class Bank {
     }
 
     /**
-     * @return the taiKhoanCoKyHanList
+     * @return the termAccountList
      */
-    public List<TermAccount> getTaiKhoanCoKyHanList() {
-        return taiKhoanCoKyHanList;
+    public List<TermAccount> getTermAccountList() {
+        return termAccountList;
     }
 
     /**
-     * @param taiKhoanCoKyHan the taiKhoanCoKyHanList to set
+     * @param taiKhoanCoKyHan the termAccountList to set
      */
-    public void setTaiKhoanCoKyHanList(List<TermAccount> taiKhoanCoKyHan) {
-        this.taiKhoanCoKyHanList = taiKhoanCoKyHan;
+    public void setTermAccountList(List<TermAccount> taiKhoanCoKyHan) {
+        this.termAccountList = taiKhoanCoKyHan;
     }
 
 }
