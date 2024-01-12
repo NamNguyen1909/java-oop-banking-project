@@ -20,11 +20,11 @@ public class Java_oop_banking_project {
         Bank bank = new Bank();
 
         bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-//
-//        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
-//        Employee p2 = new Employee("Hoang Phuc", "Nam", "01/02/2004", "Ben Tre", "1312312331", "admin");
-//
-//        bank.addEmployee(p1, p2);
+
+        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
+        Employee p2 = new Employee("Hoang Phuc", "Nam", "01/02/2004", "Ben Tre", "1312312331", "admin");
+
+        bank.addEmployee(p1, p2);
 
         bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
 
@@ -32,13 +32,16 @@ public class Java_oop_banking_project {
         bank.readUnlimitedAccountListFromFile(bank.getNonTermAccountList(), "src/main/resources/unlimitedAccountList.txt");
         bank.readTermAccountListFromFile(bank.getTermAccountList(), "src/main/resources/termAccountList.txt");
 
-//        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
-//        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
-//
-//        NonTermAccount at3 = new NonTermAccount(ct2, 111111);
-//        NonTermAccount at4 = new NonTermAccount(ct2, 111001);
-//        bank.addCustomer(ct1, ct2);
-//        bank.addNonTermAccount(at3, at4);
+        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
+        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
+
+        NonTermAccount at3 = new NonTermAccount(ct1, 111111);
+        NonTermAccount at4 = new NonTermAccount(ct2, 222222);
+        TermAccount at5 = new TermAccount(ct1, 333333, Term.SIX_MONTHS);
+        TermAccount at6 = new TermAccount(ct2, 444444, Term.TWELVE_MONTHS);
+        bank.addCustomer(ct1, ct2);
+        bank.addNonTermAccount(at3, at4);
+        bank.addTermAccount(at5, at6);
 //
 //        bank.displayCustomerList();
 //        bank.displayEmployeeList();
@@ -159,7 +162,7 @@ public class Java_oop_banking_project {
                                                         taiKhoanCoKyHan.withdraw(amount);
                                                         NonTermAccount unlimitedAccountInstance = (NonTermAccount) unlimitedAccount.get();
                                                         // Thực hiện các hành động với unlimitedAccountInstance ở đây
-                                                        unlimitedAccountInstance.deposit(amount*100.2/100);
+                                                        unlimitedAccountInstance.deposit(amount * 100.2 / 100);
                                                     } else {
                                                         System.out.println("Khong tim thay tai khoan khong ki han.");
                                                     }
@@ -247,6 +250,7 @@ public class Java_oop_banking_project {
 
                                         // Xóa tất cả các tài khoản của khách hàng khỏi danh sách chung
                                         bank.getNonTermAccountList().removeAll(accountsToDelete);
+                                        bank.getTermAccountList().removeAll(accountsToDelete);
 
                                         // Xóa khách hàng khỏi danh sách khách hàng
                                         bank.getCustomerList().remove(customerToDelete);
@@ -267,7 +271,7 @@ public class Java_oop_banking_project {
                                         if (c.getCustomerID().equals(ma)) {
                                             // Xử lý khi tìm thấy khách hàng
                                             foundCustomer = true;
-                                            TermAccount taiKhoan = new TermAccount(bank.getSignedInCustomer());
+                                            TermAccount taiKhoan = new TermAccount(c);
                                             taiKhoan.input();
                                             taiKhoan.display();
                                             bank.addTermAccount(taiKhoan);
@@ -290,6 +294,8 @@ public class Java_oop_banking_project {
                                     for (Account a : bank.getNonTermAccountList()) {
                                         if (a.getAccountID().equals(matk)) {
                                             bank.getNonTermAccountList().remove(a);
+                                            bank.getCustomerList().forEach(h -> h.getAccList().remove(a));
+
                                             found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
                                             System.out.println("==> Xoa thanh cong");
                                             break;
@@ -300,6 +306,7 @@ public class Java_oop_banking_project {
                                         for (Account a : bank.getTermAccountList()) {
                                             if (a.getAccountID().equals(matk)) {
                                                 bank.getTermAccountList().remove(a);
+                                                bank.getCustomerList().forEach(h -> h.getAccList().remove(a));
                                                 found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
                                                 System.out.println("==> Xoa thanh cong");
                                                 break;
@@ -457,6 +464,7 @@ public class Java_oop_banking_project {
                     System.out.println("~~~~~Dang nhap");
                     bank.signIn();
                     if (bank.getSignedInCustomer() != null) {
+                        bank.getSignedInCustomer().getAccList().forEach(a->a.display());
                         //tinh tien lai
                         System.out.print("Nhap ma tai khoan can tinh lai: ");
                         String maTaiKhoanTinhLai = Configuration.sc.nextLine();

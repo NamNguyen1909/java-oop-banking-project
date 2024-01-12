@@ -81,6 +81,7 @@ public class Bank {
         System.out.println("\nDanh sach tai khoan: ");
 
         this.getNonTermAccountList().forEach(u -> u.display());
+        this.getTermAccountList().forEach(a->a.display());
     }
 
     //Tra cứu khách hàng theo họ tên và mã số khách hàng.

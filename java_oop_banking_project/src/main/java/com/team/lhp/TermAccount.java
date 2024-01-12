@@ -37,7 +37,7 @@ public class TermAccount extends Account {
         }
         setAccountID(generateAccountId());
 
-        this.term = term;
+        this.term = kyhan;
         this.dueDate = term.calculateMaturityDate(LocalDate.now());
     }
 

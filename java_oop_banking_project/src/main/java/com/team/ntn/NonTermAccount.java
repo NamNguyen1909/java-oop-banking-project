@@ -131,6 +131,7 @@ public class NonTermAccount extends Account {
     /**
      * @return the balance
      */
+    @Override
     public double getBalance() {
         return balance;
     }
@@ -138,6 +139,7 @@ public class NonTermAccount extends Account {
     /**
      * @param balance the balance to set
      */
+    @Override
     public void setBalance(double balance) {
         this.balance = balance;
     }
