@@ -25,7 +25,7 @@ public class UnlimitedAccount extends Account {
         if (balance >= 100000) {
             setBalance(balance);
         } else {
-            throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+            throw new Exception("--> So tien toi thieu de mo tai khoan la 100.000 dong!\n");
         }
         setAccountID(generateAccountId());
     }
@@ -35,7 +35,7 @@ public class UnlimitedAccount extends Account {
         if (balance >= 100000) {
             setBalance(balance);
         } else {
-            throw new Exception("So tien toi thieu de mo tai khoan la 100.000 dong!\n");
+            throw new Exception("--> So tien toi thieu de mo tai khoan la 100.000 dong!\n");
         }
         setAccountID(accountId);
     }
@@ -44,7 +44,7 @@ public class UnlimitedAccount extends Account {
     public void display() {
         super.display();
         System.out.printf("\tSo du: %.1f", this.balance);
-        System.out.println("\n======================================================================================");
+        System.out.println("\n\n======================================================================================");
     }
 
     @Override
@@ -81,10 +81,10 @@ public class UnlimitedAccount extends Account {
     public void deposit(double amount) {
         if (amount > 0) {
             setBalance(this.balance + amount);
-            System.out.printf("=>Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
+            System.out.printf("--> Nap tien thanh cong!\n==>So du moi: %.1f\n", this.getBalance());
 
         } else {
-            System.out.println("So tien nap vao phai lon hon 0!\n");
+            System.out.println("--> So tien nap vao phai lon hon 0!\n");
         }
     }
 
@@ -92,11 +92,11 @@ public class UnlimitedAccount extends Account {
     public void withdraw(double amount) {
         if (amount > 0 && this.balance - amount >= 50000) {
             setBalance(this.balance - amount);
-            System.out.println("Rut tien thanh cong!");
-            System.out.printf("So du moi: %.1f\n", this.getBalance());
+            System.out.println("--> Rut tien thanh cong!");
+            System.out.printf("--> So du moi: %.1f\n", this.getBalance());
 
         } else {
-            System.out.println("So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
+            System.out.println("--> So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
         }
     }
 
@@ -124,8 +124,8 @@ public class UnlimitedAccount extends Account {
 
     @Override
     public void tinhTienLai() {
-        System.out.printf("So tien hien tai: %.1f\n", this.balance);
-        System.out.printf("Tien lai nhan duoc sau 1 nam: %.1f\n", this.balance * 0.002 / 100);
+        System.out.printf("--> So tien hien tai: %.1f\n", this.balance);
+        System.out.printf("--> Tien lai sau 1 nam: %.1f\n", this.balance * 0.002);
     }
 
     /**

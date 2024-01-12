@@ -8,7 +8,7 @@ import com.team.ntn.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+//import java.util.stream.Collectors;
 
 /**
  *
@@ -22,7 +22,7 @@ public class Java_oop_banking_project {
         bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
 
         Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
-        Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
+        Employee p2 = new Employee("Hoang Phuc", "Nam", "01/02/2004", "Ben Tre", "1312312331", "admin");
 
         bank.addEmployee(p1, p2);
 
@@ -31,9 +31,9 @@ public class Java_oop_banking_project {
         bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
         bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
         bank.readTermAccountListFromFile(bank.getTaiKhoanCoKyHanList(), "src/main/resources/termAccountList.txt");
-        
-        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
-        Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
+
+        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
+        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
 
         UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
         UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
@@ -93,7 +93,7 @@ public class Java_oop_banking_project {
                                 case 3:
                                     System.out.print("Nhap mat khau moi: ");
                                     bank.getCustomerList().stream().filter(a -> a.equals(bank.getSignedInPer())).findFirst().get().setPassword(Configuration.sc.nextLine());
-                                    System.out.println("=>Doi mat khau thanh cong!");
+                                    System.out.println("==> Doi mat khau thanh cong!");
                                     break;
                                 case 4:
                                     //tao tai khoan co ky han
@@ -125,6 +125,7 @@ public class Java_oop_banking_project {
                                     //rut tien
                                     System.out.print("Nhap ma tai khoan muon rut: ");
                                     String maTaiKhoanRutTien = Configuration.sc.nextLine();
+
                                     // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
                                     Optional<Account> taiKhoanRutTienTimThay = bank.getSignedInCustomer().getAccList().stream()
                                             .filter(a -> a.getAccountID().equals(maTaiKhoanRutTien))
@@ -133,7 +134,9 @@ public class Java_oop_banking_project {
                                     if (taiKhoanRutTienTimThay.isPresent()) {
                                         System.out.print("So tien muon rut: ");
                                         amount = Double.parseDouble(Configuration.sc.nextLine());
+                                        
                                         taiKhoanRutTienTimThay.get().withdraw(amount);
+
                                     } else {
                                         System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanRutTien);
                                     }
@@ -234,7 +237,7 @@ public class Java_oop_banking_project {
                                     }
 
                                     if (!foundCustomer) {
-                                        System.out.println("=>Khong tim thay khach hang!");
+                                        System.out.println("==> Khong tim thay khach hang!");
                                     }
                                     break;
                                 case 6:
@@ -249,7 +252,7 @@ public class Java_oop_banking_project {
                                         if (a.getAccountID().equals(matk)) {
                                             bank.getUnlimitedAccountList().remove(a);
                                             found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
-                                            System.out.println("=>Xoa thanh cong");
+                                            System.out.println("==> Xoa thanh cong");
                                             break;
                                         }
                                     }
@@ -259,7 +262,7 @@ public class Java_oop_banking_project {
                                             if (a.getAccountID().equals(matk)) {
                                                 bank.getTaiKhoanCoKyHanList().remove(a);
                                                 found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
-                                                System.out.println("=>Xoa thanh cong");
+                                                System.out.println("==> Xoa thanh cong");
                                                 break;
                                             }
                                         }
@@ -267,7 +270,7 @@ public class Java_oop_banking_project {
 
                                     // Kiểm tra biến cờ để xuất thông báo phù hợp
                                     if (!found) {
-                                        System.out.println("=>Khong tim thay tai khoan");
+                                        System.out.println("==> Khong tim thay tai khoan");
                                     }
 
                                     break;
@@ -276,10 +279,10 @@ public class Java_oop_banking_project {
                                     String sc7 = Configuration.sc.nextLine();
                                     List<Customer> foundCus = bank.searchCustomer(sc7);
                                     if (foundCus != null) {
-                                        System.out.println("=>Tim thay: ");
+                                        System.out.println("==> Tim thay: ");
                                         foundCus.forEach(a -> a.display());
                                     } else {
-                                        System.out.println("=>Khong tim thay!");
+                                        System.out.println("==> Khong tim thay!");
                                     }
                                     break;
                                 case 8:
@@ -287,7 +290,7 @@ public class Java_oop_banking_project {
                                     String sc8 = Configuration.sc.nextLine();
                                     List<Account> foundCusAcc = bank.searchCusAcc(sc8);
                                     if (!foundCusAcc.isEmpty()) {
-                                        System.out.println("=>Danh sach tai khoan cua " + sc8);
+                                        System.out.println("==> Danh sach tai khoan cua " + sc8);
                                         foundCusAcc.forEach(a -> a.display());
                                     }
                                     break;

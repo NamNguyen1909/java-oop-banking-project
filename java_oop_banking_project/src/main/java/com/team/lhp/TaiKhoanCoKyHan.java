@@ -4,12 +4,13 @@
  */
 package com.team.lhp;
 
+import com.team.ntn.*;
+import static com.team.ntn.Configuration.sc;
 import java.util.Scanner;
 //import static com.team.lhp.Scanner.sc;
 import java.time.LocalDate;
-import com.team.ntn.*;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+//import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -98,6 +99,7 @@ public class TaiKhoanCoKyHan extends Account {
                 break;
             case 4:
                 this.kyHan = KyHan.MUOI_HAI_THANG;
+                break;
             default:
                 System.out.println("Khong hop le, ky han mac dinh se la MOT TUAN!");
                 kyHan = KyHan.MOT_TUAN;
@@ -106,7 +108,7 @@ public class TaiKhoanCoKyHan extends Account {
 
         this.ngayDaoHan = kyHan.tinhDaoHan(LocalDate.now());
 
-        System.out.println("--> Tao tai khoan thanh cong!!!");
+        System.out.println("\n--> Tao tai khoan thanh cong!!!");
         Thread.sleep(2000);
     }
 
@@ -114,24 +116,47 @@ public class TaiKhoanCoKyHan extends Account {
     public void deposit(double amount) {
         if (amount > 0) {
             setSoTien(this.soTien + amount);
-            System.out.printf("=> Nap tien thanh cong!\n==> So du moi: %.1f\n", this.getSoTien());
+            System.out.printf("--> Nap tien thanh cong!\n--> So du moi: %.1f\n", this.getSoTien());
 
         } else {
-            System.out.println("So tien nap vao phai lon hon 0!\n");
+            System.out.println("--> So tien nap vao phai lon hon 0!\n");
         }
     }
 
-    @Override
-    public void withdraw(double amount) {
-        if (amount > 0 && this.soTien - amount >= 50000) {
-            setSoTien(this.soTien - amount);
-            System.out.println("Rut tien thanh cong!");
-            System.out.printf("So du moi: %.1f\n", this.getSoTien());
-
-        } else {
-            System.out.println("So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
-        }
-    }
+//    @Override
+//    public void withdraw(double amount) {
+//        System.out.println("--> Rut tien truoc ky han, lai suat chi con 0.2%");
+//        System.out.println("--> Quy khach co dong y khong?");
+//        System.out.println("--> [1] Co\t\t[0] Khong: ");
+//
+//        boolean dieuKien = true;
+//
+//        do {
+//            System.out.print("==> Quy khach chon: ");
+//            int luaChon = sc.nextInt();
+//
+//            switch (luaChon) {
+//                case 1:
+//                    dieuKien = false;
+//                    if (amount > 0 && this.soTien - amount >= 50000) {
+//                        this.setSoTien(this.soTien - amount);
+//                        setBalance(amount + getSoTien() * 0.002);
+//                        System.out.printf("\n--> Rut tien tai khoan ky han thanh cong! So du cuoi: %.1f\n", this.getSoTien());
+//                        System.out.printf("--> So du moi tai khoan chinh: %.1f\n", getBalance());
+//
+//                    } else {
+//                        System.out.println("--> So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
+//                    }
+//                    break;
+//                case 0:
+//                    dieuKien = false;
+//                    System.out.println("--> Yeu cau da duoc huy!");
+//                    break;
+//                default:
+//                    System.out.println("--> Yeu cau khong hop le, xin moi quy khach chon lai!");
+//            }
+//        } while (dieuKien);
+//    }
 
     @Override
     public boolean equals(Object obj) {
@@ -163,8 +188,8 @@ public class TaiKhoanCoKyHan extends Account {
         double tienLaiVaoNgayDaoHan = this.kyHan.tinhLai(this.soTien);
 
         System.out.printf("\n- So tien hien tai: %.1f\n", this.soTien);
-        System.out.printf("- Ngay hien tai: %s\n", currentDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
-        System.out.printf("\t+ Tien lai tinh den hien tai: %.1f\n", tienLaiDenNgayHienTai);
+        System.out.printf("- Ngay hom nay: %s\n", currentDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+        System.out.printf("\t+ Tien lai tinh den hien tai: %.1f/nam\n", tienLaiDenNgayHienTai);
         System.out.printf("- Ngay dao han: %s\n", maturityDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
         System.out.printf("\t+ Tien lai vao ngay dao han: %.1f\n", tienLaiVaoNgayDaoHan);
     }

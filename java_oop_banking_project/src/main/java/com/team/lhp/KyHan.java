@@ -25,7 +25,7 @@ public enum KyHan {
     MOT_THANG(1, 5.5) {
         @Override
         public LocalDate tinhDaoHan(LocalDate d) {
-            return d.plusMonths(1);
+            return d.plusMonths(this.khoangThoiGian);
         }
 
         @Override
@@ -37,7 +37,7 @@ public enum KyHan {
     SAU_THANG(6, 7.5) {
         @Override
         public LocalDate tinhDaoHan(LocalDate d) {
-            return d.plusMonths(6);
+            return d.plusMonths(this.khoangThoiGian);
         }
 
         @Override
@@ -49,7 +49,7 @@ public enum KyHan {
     MUOI_HAI_THANG(12, 7.9) {
         @Override
         public LocalDate tinhDaoHan(LocalDate d) {
-            return d.plusMonths(12);
+            return d.plusMonths(this.khoangThoiGian);
         }
 
         @Override
