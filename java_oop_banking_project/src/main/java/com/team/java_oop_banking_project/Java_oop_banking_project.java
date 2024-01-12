@@ -159,7 +159,7 @@ public class Java_oop_banking_project {
                                                         taiKhoanCoKyHan.withdraw(amount);
                                                         UnlimitedAccount unlimitedAccountInstance = (UnlimitedAccount) unlimitedAccount.get();
                                                         // Thực hiện các hành động với unlimitedAccountInstance ở đây
-                                                        unlimitedAccountInstance.deposit(amount);
+                                                        unlimitedAccountInstance.deposit(amount*100.2/100);
                                                     } else {
                                                         System.out.println("Khong tim thay tai khoan khong ki han.");
                                                     }
