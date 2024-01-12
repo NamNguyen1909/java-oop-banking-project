@@ -24,7 +24,6 @@ public class Java_oop_banking_project {
         Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
         Employee p2 = new Employee("Hoang Phuc", "nam", "23/02/2001", "Ben Tre", "312312331", "admin");
 
-
         bank.addEmployee(p1, p2);
 
         bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
@@ -95,6 +94,7 @@ public class Java_oop_banking_project {
                                 case 3:
                                     System.out.print("Nhap mat khau moi: ");
                                     bank.getCustomerList().stream().filter(a -> a.equals(bank.getSignedInPer())).findFirst().get().setPassword(Configuration.sc.nextLine());
+                                    System.out.println("=>Doi mat khau thanh cong!");
                                     break;
                                 case 4:
                                     //tao tai khoan co ky han
@@ -226,8 +226,10 @@ public class Java_oop_banking_project {
                                         if (c.getCustomerID().equals(ma)) {
                                             // Xử lý khi tìm thấy khách hàng
                                             foundCustomer = true;
-                                            // Thêm tài khoản cho khách hàng có kỳ hạn
-                                            // ...
+                                            TaiKhoanCoKyHan taiKhoan = new TaiKhoanCoKyHan(bank.getSignedInCustomer());
+                                            taiKhoan.input();
+                                            taiKhoan.display();
+                                            bank.addTaiKhoanCoKyHan(taiKhoan);
                                             break;
                                         }
                                     }
@@ -237,25 +239,37 @@ public class Java_oop_banking_project {
                                     }
                                     break;
                                 case 6:
-//                                    System.out.print("Nhap ten ma cua tai khoan can xoa: ");
-//                                    String matk = Configuration.sc.nextLine();
-//
-//                                    boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
-//                                    //phai tim trong 2 danh sach co ky han va khong ky han
-//
-//                                    for (Account a : bank.getAccountList()) {
-//                                        if (a.getUsername().equals(tentk) && a.getPassword().equals(matkhautk)) {
-//                                            bank.removeAccount(a);
-//                                            found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
-//                                            System.out.println("=>Xoa thanh cong");
-//                                            break;
-//                                        }
-//                                    }
-//
-//                                    // Kiểm tra biến cờ để xuất thông báo phù hợp
-//                                    if (!found) {
-//                                        System.out.println("=>Khong tim thay tai khoan");
-//                                    }
+                                    bank.getUnlimitedAccountList().forEach(a -> a.display());
+                                    bank.getTaiKhoanCoKyHanList().forEach(a -> a.display());
+                                    System.out.print("Nhap ten ma cua tai khoan can xoa: ");
+                                    String matk = Configuration.sc.nextLine();
+
+                                    boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
+
+                                    for (Account a : bank.getUnlimitedAccountList()) {
+                                        if (a.getAccountID().equals(matk)) {
+                                            bank.getUnlimitedAccountList().remove(a);
+                                            found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
+                                            System.out.println("=>Xoa thanh cong");
+                                            break;
+                                        }
+                                    }
+
+                                    if (!found) {
+                                        for (Account a : bank.getTaiKhoanCoKyHanList()) {
+                                            if (a.getAccountID().equals(matk)) {
+                                                bank.getTaiKhoanCoKyHanList().remove(a);
+                                                found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
+                                                System.out.println("=>Xoa thanh cong");
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    // Kiểm tra biến cờ để xuất thông báo phù hợp
+                                    if (!found) {
+                                        System.out.println("=>Khong tim thay tai khoan");
+                                    }
 
                                     break;
                                 case 7:

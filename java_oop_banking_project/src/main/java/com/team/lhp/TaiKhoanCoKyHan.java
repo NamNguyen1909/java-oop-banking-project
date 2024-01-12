@@ -55,8 +55,8 @@ public class TaiKhoanCoKyHan extends Account {
     @Override
     public void display() {
         super.display();
-        System.out.printf("\tMa tai khoan: %s\tSo du: %.1f\tKy Han: %s\tNgay Dao Han: %s\n",
-                this.accountID,this.soTien, this.kyHan, this.ngayDaoHan.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+        System.out.printf("\tSo du: %.1f\tKy Han: %s\tNgay Dao Han: %s\n",
+                this.soTien, this.kyHan, this.ngayDaoHan.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
         System.out.println("\n--------------------------------------------------------------------------------------");
     }
 
