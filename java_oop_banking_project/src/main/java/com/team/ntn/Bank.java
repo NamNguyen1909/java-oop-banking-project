@@ -392,7 +392,7 @@ public class Bank {
             for (TaiKhoanCoKyHan account : termAccountList) {
                 writer.write(account.getAccountID() + ";"
                         + account.getUser().getCustomerID() + ";"
-                        + account.getSoTien() + ";"
+                        + account.getBalance() + ";"
                         + account.getKyHan().name() + ";"
                         + account.getNgayDaoHan().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
                 writer.newLine();

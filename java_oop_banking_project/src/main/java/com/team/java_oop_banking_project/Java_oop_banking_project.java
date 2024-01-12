@@ -20,11 +20,11 @@ public class Java_oop_banking_project {
         Bank bank = new Bank();
 
         bank.readEmployeeListFromFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
-
-        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
-        Employee p2 = new Employee("Hoang Phuc", "Nam", "01/02/2004", "Ben Tre", "1312312331", "admin");
-
-        bank.addEmployee(p1, p2);
+//
+//        Employee p1 = new Employee("Thanh Nam", "Nam", "19/09/2004", "Ben Tre", "1234567890", "admin");
+//        Employee p2 = new Employee("Hoang Phuc", "Nam", "01/02/2004", "Ben Tre", "1312312331", "admin");
+//
+//        bank.addEmployee(p1, p2);
 
         bank.writeEmployeeListToFile(bank.getEmployeeList(), "src/main/resources/employeeList.txt");
 
@@ -32,17 +32,17 @@ public class Java_oop_banking_project {
         bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
         bank.readTermAccountListFromFile(bank.getTaiKhoanCoKyHanList(), "src/main/resources/termAccountList.txt");
 
-        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
-        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
-
-        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
-        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
-        bank.addCustomer(ct1, ct2);
-        bank.addUnlimitedAccount(at3, at4);
-
-        bank.displayCustomerList();
-        bank.displayEmployeeList();
-        bank.displayAccountList();
+//        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
+//        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
+//
+//        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
+//        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
+//        bank.addCustomer(ct1, ct2);
+//        bank.addUnlimitedAccount(at3, at4);
+//
+//        bank.displayCustomerList();
+//        bank.displayEmployeeList();
+//        bank.displayAccountList();
 
         int option;
         double amount;
@@ -104,6 +104,7 @@ public class Java_oop_banking_project {
                                     bank.addTaiKhoanCoKyHan(taiKhoan);
                                     break;
                                 case 5:
+                                    bank.getSignedInCustomer().getAccList().forEach(a -> a.display());
                                     System.out.print("Nhap ma tai khoan muon gui: ");
                                     String ma = Configuration.sc.nextLine();
                                     // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
@@ -123,24 +124,62 @@ public class Java_oop_banking_project {
 
                                 case 6:
                                     //rut tien
+                                    bank.getSignedInCustomer().getAccList().forEach(a -> a.display());
                                     System.out.print("Nhap ma tai khoan muon rut: ");
-                                    String maTaiKhoanRutTien = Configuration.sc.nextLine();
+                                    ma = Configuration.sc.nextLine();
 
                                     // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
                                     Optional<Account> taiKhoanRutTienTimThay = bank.getSignedInCustomer().getAccList().stream()
-                                            .filter(a -> a.getAccountID().equals(maTaiKhoanRutTien))
+                                            .filter(a -> a.getAccountID().equals(ma))
                                             .findFirst();
 
                                     if (taiKhoanRutTienTimThay.isPresent()) {
-                                        System.out.print("So tien muon rut: ");
-                                        amount = Double.parseDouble(Configuration.sc.nextLine());
-                                        
-                                        taiKhoanRutTienTimThay.get().withdraw(amount);
+                                        Account account = taiKhoanRutTienTimThay.get();
+                                        if (account instanceof TaiKhoanCoKyHan) {
+                                            TaiKhoanCoKyHan taiKhoanCoKyHan = (TaiKhoanCoKyHan) account;
+
+                                            do {
+                                                System.out.println("--> Rut tien truoc ky han, lai suat chi con 0.2%");
+                                                System.out.println("--> Quy khach co dong y khong?");
+                                                System.out.println("--> [1] Co\t\t[0] Khong: ");
+                                                System.out.print("Nhap lua chon cua ban: ");
+
+                                                option = Bank.getUserSelection(0, 1);
+                                            } while (option == -1);
+
+                                            switch (option) {
+                                                case 1:
+
+                                                    Optional<Account> unlimitedAccount = bank.getSignedInCustomer().getAccList().stream()
+                                                            .filter(a -> a instanceof UnlimitedAccount)
+                                                            .findFirst();
+                                                    if (unlimitedAccount.isPresent()) {
+                                                        System.out.print("So tien muon rut: ");
+                                                        amount = Double.parseDouble(Configuration.sc.nextLine());
+                                                        taiKhoanCoKyHan.withdraw(amount);
+                                                        UnlimitedAccount unlimitedAccountInstance = (UnlimitedAccount) unlimitedAccount.get();
+                                                        // Thực hiện các hành động với unlimitedAccountInstance ở đây
+                                                        unlimitedAccountInstance.deposit(amount);
+                                                    } else {
+                                                        System.out.println("Khong tim thay tai khoan khong ki han.");
+                                                    }
+                                                    break;
+                                                case 2:
+                                                    System.out.println("--> Yeu cau da duoc huy!");
+                                                    break;
+                                            }
+                                        } else if (account instanceof UnlimitedAccount) {
+                                            System.out.print("So tien muon rut: ");
+                                            amount = Double.parseDouble(Configuration.sc.nextLine());
+                                            UnlimitedAccount taiKhoanKhongKyHan = (UnlimitedAccount) account;
+                                            taiKhoanKhongKyHan.withdraw(amount);
+                                        }
 
                                     } else {
-                                        System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanRutTien);
+                                        System.out.println("Khong tim thay tai khoan co ma: " + ma);
                                     }
                                     break;
+
                                 case 7:
                                     //tinh tien lai
                                     System.out.print("Nhap ma tai khoan can tinh lai: ");
@@ -314,6 +353,7 @@ public class Java_oop_banking_project {
                     }
 
                     break;
+
                 case 3:
                     System.out.println("~~~~~Dang nhap");
                     bank.signIn();
@@ -330,6 +370,8 @@ public class Java_oop_banking_project {
 
                             switch (option) {
                                 case 1:
+                                    bank.getSignedInCustomer().getAccList().forEach(a -> a.display());
+
                                     System.out.print("Nhap ma tai khoan muon gui: ");
                                     String ma = Configuration.sc.nextLine();
                                     // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
@@ -347,20 +389,60 @@ public class Java_oop_banking_project {
 
                                     break;
                                 case 2:
-                                    //rut tien 
+                                    //rut tien
+                                    bank.getSignedInCustomer().getAccList().forEach(a -> a.display());
                                     System.out.print("Nhap ma tai khoan muon rut: ");
-                                    String maTaiKhoanRutTien = Configuration.sc.nextLine();
+                                    ma = Configuration.sc.nextLine();
+
                                     // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
                                     Optional<Account> taiKhoanRutTienTimThay = bank.getSignedInCustomer().getAccList().stream()
-                                            .filter(a -> a.getAccountID().equals(maTaiKhoanRutTien))
+                                            .filter(a -> a.getAccountID().equals(ma))
                                             .findFirst();
 
                                     if (taiKhoanRutTienTimThay.isPresent()) {
-                                        System.out.print("So tien muon rut: ");
-                                        amount = Double.parseDouble(Configuration.sc.nextLine());
-                                        taiKhoanRutTienTimThay.get().withdraw(amount);
+                                        Account account = taiKhoanRutTienTimThay.get();
+                                        if (account instanceof TaiKhoanCoKyHan) {
+                                            TaiKhoanCoKyHan taiKhoanCoKyHan = (TaiKhoanCoKyHan) account;
+
+                                            do {
+                                                System.out.println("--> Rut tien truoc ky han, lai suat chi con 0.2%");
+                                                System.out.println("--> Quy khach co dong y khong?");
+                                                System.out.println("--> [1] Co\t\t[0] Khong: ");
+                                                System.out.print("Nhap lua chon cua ban: ");
+
+                                                option = Bank.getUserSelection(0, 1);
+                                            } while (option == -1);
+
+                                            switch (option) {
+                                                case 1:
+
+                                                    Optional<Account> unlimitedAccount = bank.getSignedInCustomer().getAccList().stream()
+                                                            .filter(a -> a instanceof UnlimitedAccount)
+                                                            .findFirst();
+                                                    if (unlimitedAccount.isPresent()) {
+                                                        System.out.print("So tien muon rut: ");
+                                                        amount = Double.parseDouble(Configuration.sc.nextLine());
+                                                        taiKhoanCoKyHan.withdraw(amount);
+                                                        UnlimitedAccount unlimitedAccountInstance = (UnlimitedAccount) unlimitedAccount.get();
+                                                        // Thực hiện các hành động với unlimitedAccountInstance ở đây
+                                                        unlimitedAccountInstance.deposit(amount);
+                                                    } else {
+                                                        System.out.println("Khong tim thay tai khoan khong ki han.");
+                                                    }
+                                                    break;
+                                                case 2:
+                                                    System.out.println("--> Yeu cau da duoc huy!");
+                                                    break;
+                                            }
+                                        } else if (account instanceof UnlimitedAccount) {
+                                            System.out.print("So tien muon rut: ");
+                                            amount = Double.parseDouble(Configuration.sc.nextLine());
+                                            UnlimitedAccount taiKhoanKhongKyHan = (UnlimitedAccount) account;
+                                            taiKhoanKhongKyHan.withdraw(amount);
+                                        }
+
                                     } else {
-                                        System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanRutTien);
+                                        System.out.println("Khong tim thay tai khoan co ma: " + ma);
                                     }
                                     break;
                                 case 3:
