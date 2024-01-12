@@ -40,7 +40,7 @@ public class TaiKhoanCoKyHan extends Account {
         this.ngayDaoHan = kyHan.tinhDaoHan(LocalDate.now());
     }
 
-    public TaiKhoanCoKyHan(Customer customer, double balance, String accountId, KyHan kyHan,LocalDate ngayDaoHan) throws Exception {
+    public TaiKhoanCoKyHan(Customer customer, double balance, String accountId, KyHan kyHan, LocalDate ngayDaoHan) throws Exception {
         super(customer);
         if (balance >= 100000) {
             setBalance(balance);
@@ -53,11 +53,9 @@ public class TaiKhoanCoKyHan extends Account {
         this.ngayDaoHan = ngayDaoHan;
     }
 
-    @Override
     public void display() {
-        super.display();
-        System.out.printf("\tSo du: %.1f\tKy Han: %s\tNgay Dao Han: %s\n",
-                this.soTien, this.kyHan, this.ngayDaoHan.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+        System.out.printf("\tMa tai khoan: %s\tSo du: %.1f\n\tKy Han: %s\tNgay Dao Han: %s\n",
+                this.accountID, this.soTien, this.kyHan, this.ngayDaoHan.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
         System.out.println("\n--------------------------------------------------------------------------------------");
     }
 
@@ -159,8 +157,16 @@ public class TaiKhoanCoKyHan extends Account {
 
     @Override
     public void tinhTienLai() {
-        System.out.printf("So tien hien tai: %.1f\n", this.soTien);
-        System.out.printf("Tien lai: %.1f\n", this.kyHan.tinhLai(this.soTien));
+        LocalDate currentDate = LocalDate.now();
+        double tienLaiDenNgayHienTai = this.getSoTien() * 0.002;
+        LocalDate maturityDate = this.ngayDaoHan;
+        double tienLaiVaoNgayDaoHan = this.kyHan.tinhLai(this.soTien);
+
+        System.out.printf("\n- So tien hien tai: %.1f\n", this.soTien);
+        System.out.printf("- Ngay hien tai: %s\n", currentDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+        System.out.printf("\t+ Tien lai tinh den hien tai: %.1f\n", tienLaiDenNgayHienTai);
+        System.out.printf("- Ngay dao han: %s\n", maturityDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+        System.out.printf("\t+ Tien lai vao ngay dao han: %.1f\n", tienLaiVaoNgayDaoHan);
     }
 
     public boolean isDaoHan() {
