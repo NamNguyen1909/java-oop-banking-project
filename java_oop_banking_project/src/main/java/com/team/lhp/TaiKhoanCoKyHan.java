@@ -128,7 +128,6 @@ public class TaiKhoanCoKyHan extends Account {
     public void withdraw(double amount) {
         if (amount > 0 && this.balance - amount >= 0) {
             this.setBalance(this.balance - amount);
-            setBalance(amount + getBalance() * 0.002);
             System.out.printf("\n--> Rut tien tai khoan ky han thanh cong! So du cuoi: %.1f\n", this.getBalance());
 
         } else {
