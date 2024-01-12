@@ -27,8 +27,8 @@ public class Bank {
     private List<Customer> customerList = new ArrayList<>();
     private List<Employee> employeeList = new ArrayList<>();
 
-    private List<UnlimitedAccount> unlimitedAccountList = new ArrayList<>();
-    private List<TaiKhoanCoKyHan> taiKhoanCoKyHanList = new ArrayList<>();
+    private List<NonTermAccount> unlimitedAccountList = new ArrayList<>();
+    private List<TermAccount> taiKhoanCoKyHanList = new ArrayList<>();
 
     private Person signedInPer = null;
 
@@ -52,15 +52,15 @@ public class Bank {
         this.getEmployeeList().remove(employees);
     }
 
-    public void addUnlimitedAccount(UnlimitedAccount... accounts) {
+    public void addUnlimitedAccount(NonTermAccount... accounts) {
         this.getUnlimitedAccountList().addAll(Arrays.asList(accounts));
     }
 
-    public void addTaiKhoanCoKyHan(TaiKhoanCoKyHan... accounts) {
+    public void addTaiKhoanCoKyHan(TermAccount... accounts) {
         this.getTaiKhoanCoKyHanList().addAll(Arrays.asList(accounts));
     }
 
-    public void removeUnlimitedAccount(UnlimitedAccount account) {
+    public void removeUnlimitedAccount(NonTermAccount account) {
         this.getUnlimitedAccountList().remove(account);
         //so sanh bang equals nen phai override equals
     }
@@ -214,14 +214,14 @@ public class Bank {
 
     int loaiTaiKhoan(String soTaiKhoan) {
         // Duyệt qua danh sách ClassA
-        for (UnlimitedAccount objA : unlimitedAccountList) {
+        for (NonTermAccount objA : unlimitedAccountList) {
             if (objA.user.IDCard.equals(soTaiKhoan)) {
                 return 1;
             }
         }
 
         // Duyệt qua danh sách ClassB
-        for (TaiKhoanCoKyHan objB : getTaiKhoanCoKyHanList()) {
+        for (TermAccount objB : getTaiKhoanCoKyHanList()) {
             if (objB.user.IDCard.equals(soTaiKhoan)) {
                 return 2;
             }
@@ -335,10 +335,10 @@ public class Bank {
 //        }
 //        return null;
 //    }
-    public void writeUnlimitedAccountListToFile(List<UnlimitedAccount> unlimitedAccountList, String filePath) {
+    public void writeUnlimitedAccountListToFile(List<NonTermAccount> unlimitedAccountList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-            for (UnlimitedAccount account : unlimitedAccountList) {
-                // Ghi thông tin của mỗi tài khoản UnlimitedAccount vào tệp tin
+            for (NonTermAccount account : unlimitedAccountList) {
+                // Ghi thông tin của mỗi tài khoản NonTermAccount vào tệp tin
                 writer.write(account.getAccountID() + ";"
                         + account.getUser().getCustomerID() + ";"
                         + account.getBalance());
@@ -350,7 +350,7 @@ public class Bank {
         }
     }
 
-    public void readUnlimitedAccountListFromFile(List<UnlimitedAccount> unlimitedAccountList, String filePath) {
+    public void readUnlimitedAccountListFromFile(List<NonTermAccount> unlimitedAccountList, String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -365,8 +365,8 @@ public class Bank {
                     Customer customer = getCustomerByID(customerID);
 
                     if (customer != null) {
-                        // Tạo đối tượng UnlimitedAccount và thêm vào danh sách
-                        UnlimitedAccount unlimitedAccount = new UnlimitedAccount(customer, balance, accountID);
+                        // Tạo đối tượng NonTermAccount và thêm vào danh sách
+                        NonTermAccount unlimitedAccount = new NonTermAccount(customer, balance, accountID);
                         unlimitedAccountList.add(unlimitedAccount);
                     }
                 }
@@ -387,14 +387,14 @@ public class Bank {
         return null;
     }
 
-    public void writeTermAccountListToFile(List<TaiKhoanCoKyHan> termAccountList, String filePath) {
+    public void writeTermAccountListToFile(List<TermAccount> termAccountList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
-            for (TaiKhoanCoKyHan account : termAccountList) {
+            for (TermAccount account : termAccountList) {
                 writer.write(account.getAccountID() + ";"
                         + account.getUser().getCustomerID() + ";"
                         + account.getBalance() + ";"
-                        + account.getKyHan().name() + ";"
-                        + account.getNgayDaoHan().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+                        + account.getTerm().name() + ";"
+                        + account.getDueDate().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
                 writer.newLine();
             }
             System.out.println("Danh sach tai khoan co ky han da duoc ghi vao file.");
@@ -403,7 +403,7 @@ public class Bank {
         }
     }
 
-    public void readTermAccountListFromFile(List<TaiKhoanCoKyHan> termAccountList, String filePath) {
+    public void readTermAccountListFromFile(List<TermAccount> termAccountList, String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -413,7 +413,7 @@ public class Bank {
                     String accountID = parts[0];
                     String customerID = parts[1];
                     double balance = Double.parseDouble(parts[2]);
-                    KyHan kyHan = KyHan.valueOf(parts[3]);
+                    Term kyHan = Term.valueOf(parts[3]);
                     LocalDate ngayDaoHan = LocalDate.parse(parts[4], DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
 
                     // Tìm khách hàng trong danh sách khách hàng
@@ -421,8 +421,8 @@ public class Bank {
 
                     if (customer != null) {
                         try {
-                            // Sử dụng phương thức khởi tạo có sẵn của TaiKhoanCoKyHan
-                            TaiKhoanCoKyHan taiKhoanCoKyHan = new TaiKhoanCoKyHan(customer, balance, accountID, kyHan,ngayDaoHan);
+                            // Sử dụng phương thức khởi tạo có sẵn của TermAccount
+                            TermAccount taiKhoanCoKyHan = new TermAccount(customer, balance, accountID, kyHan,ngayDaoHan);
                            
                             termAccountList.add(taiKhoanCoKyHan);
                         } catch (Exception e) {
@@ -469,14 +469,14 @@ public class Bank {
     /**
      * @return the unlimitedAccountList
      */
-    public List<UnlimitedAccount> getUnlimitedAccountList() {
+    public List<NonTermAccount> getUnlimitedAccountList() {
         return unlimitedAccountList;
     }
 
     /**
      * @param accountList the unlimitedAccountList to set
      */
-    public void setUnlimitedAccountList(List<UnlimitedAccount> accountList) {
+    public void setUnlimitedAccountList(List<NonTermAccount> accountList) {
         this.unlimitedAccountList = accountList;
     }
 
@@ -531,14 +531,14 @@ public class Bank {
     /**
      * @return the taiKhoanCoKyHanList
      */
-    public List<TaiKhoanCoKyHan> getTaiKhoanCoKyHanList() {
+    public List<TermAccount> getTaiKhoanCoKyHanList() {
         return taiKhoanCoKyHanList;
     }
 
     /**
      * @param taiKhoanCoKyHan the taiKhoanCoKyHanList to set
      */
-    public void setTaiKhoanCoKyHanList(List<TaiKhoanCoKyHan> taiKhoanCoKyHan) {
+    public void setTaiKhoanCoKyHanList(List<TermAccount> taiKhoanCoKyHan) {
         this.taiKhoanCoKyHanList = taiKhoanCoKyHan;
     }
 

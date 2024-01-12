@@ -3,7 +3,7 @@
  */
 package com.team.java_oop_banking_project;
 
-import com.team.lhp.TaiKhoanCoKyHan;
+import com.team.lhp.*;
 import com.team.ntn.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,8 @@ public class Java_oop_banking_project {
 //        Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCMC", "123");
 //        Customer ct2 = new Customer("Customer 2", "Nam", "19/11/2001", "HCMC", "123213");
 //
-//        UnlimitedAccount at3 = new UnlimitedAccount(ct2, 111111);
-//        UnlimitedAccount at4 = new UnlimitedAccount(ct2, 111001);
+//        NonTermAccount at3 = new NonTermAccount(ct2, 111111);
+//        NonTermAccount at4 = new NonTermAccount(ct2, 111001);
 //        bank.addCustomer(ct1, ct2);
 //        bank.addUnlimitedAccount(at3, at4);
 //
@@ -60,7 +60,7 @@ public class Java_oop_banking_project {
                     c1.display();
                     bank.addCustomer(c1);
 
-                    UnlimitedAccount ac1 = new UnlimitedAccount(c1);
+                    NonTermAccount ac1 = new NonTermAccount(c1);
                     ac1.input();
                     ac1.display();
                     bank.addUnlimitedAccount(ac1);
@@ -98,7 +98,7 @@ public class Java_oop_banking_project {
                                 case 4:
                                     //tao tai khoan co ky han
 
-                                    TaiKhoanCoKyHan taiKhoan = new TaiKhoanCoKyHan(bank.getSignedInCustomer());
+                                    TermAccount taiKhoan = new TermAccount(bank.getSignedInCustomer());
                                     taiKhoan.input();
                                     taiKhoan.display();
                                     bank.addTaiKhoanCoKyHan(taiKhoan);
@@ -135,8 +135,8 @@ public class Java_oop_banking_project {
 
                                     if (taiKhoanRutTienTimThay.isPresent()) {
                                         Account account = taiKhoanRutTienTimThay.get();
-                                        if (account instanceof TaiKhoanCoKyHan) {
-                                            TaiKhoanCoKyHan taiKhoanCoKyHan = (TaiKhoanCoKyHan) account;
+                                        if (account instanceof TermAccount) {
+                                            TermAccount taiKhoanCoKyHan = (TermAccount) account;
 
                                             do {
                                                 System.out.println("--> Rut tien truoc ky han, lai suat chi con 0.2%");
@@ -151,13 +151,13 @@ public class Java_oop_banking_project {
                                                 case 1:
 
                                                     Optional<Account> unlimitedAccount = bank.getSignedInCustomer().getAccList().stream()
-                                                            .filter(a -> a instanceof UnlimitedAccount)
+                                                            .filter(a -> a instanceof NonTermAccount)
                                                             .findFirst();
                                                     if (unlimitedAccount.isPresent()) {
                                                         System.out.print("So tien muon rut: ");
                                                         amount = Double.parseDouble(Configuration.sc.nextLine());
                                                         taiKhoanCoKyHan.withdraw(amount);
-                                                        UnlimitedAccount unlimitedAccountInstance = (UnlimitedAccount) unlimitedAccount.get();
+                                                        NonTermAccount unlimitedAccountInstance = (NonTermAccount) unlimitedAccount.get();
                                                         // Thực hiện các hành động với unlimitedAccountInstance ở đây
                                                         unlimitedAccountInstance.deposit(amount*100.2/100);
                                                     } else {
@@ -168,10 +168,10 @@ public class Java_oop_banking_project {
                                                     System.out.println("--> Yeu cau da duoc huy!");
                                                     break;
                                             }
-                                        } else if (account instanceof UnlimitedAccount) {
+                                        } else if (account instanceof NonTermAccount) {
                                             System.out.print("So tien muon rut: ");
                                             amount = Double.parseDouble(Configuration.sc.nextLine());
-                                            UnlimitedAccount taiKhoanKhongKyHan = (UnlimitedAccount) account;
+                                            NonTermAccount taiKhoanKhongKyHan = (NonTermAccount) account;
                                             taiKhoanKhongKyHan.withdraw(amount);
                                         }
 
@@ -227,7 +227,7 @@ public class Java_oop_banking_project {
                                     c2.display();
                                     bank.addCustomer(c2);
 
-                                    UnlimitedAccount ac2 = new UnlimitedAccount(c2);
+                                    NonTermAccount ac2 = new NonTermAccount(c2);
                                     ac2.input();
                                     ac2.display();
                                     bank.addUnlimitedAccount(ac2);
@@ -267,7 +267,7 @@ public class Java_oop_banking_project {
                                         if (c.getCustomerID().equals(ma)) {
                                             // Xử lý khi tìm thấy khách hàng
                                             foundCustomer = true;
-                                            TaiKhoanCoKyHan taiKhoan = new TaiKhoanCoKyHan(bank.getSignedInCustomer());
+                                            TermAccount taiKhoan = new TermAccount(bank.getSignedInCustomer());
                                             taiKhoan.input();
                                             taiKhoan.display();
                                             bank.addTaiKhoanCoKyHan(taiKhoan);
@@ -401,8 +401,8 @@ public class Java_oop_banking_project {
 
                                     if (taiKhoanRutTienTimThay.isPresent()) {
                                         Account account = taiKhoanRutTienTimThay.get();
-                                        if (account instanceof TaiKhoanCoKyHan) {
-                                            TaiKhoanCoKyHan taiKhoanCoKyHan = (TaiKhoanCoKyHan) account;
+                                        if (account instanceof TermAccount) {
+                                            TermAccount taiKhoanCoKyHan = (TermAccount) account;
 
                                             do {
                                                 System.out.println("--> Rut tien truoc ky han, lai suat chi con 0.2%");
@@ -417,13 +417,13 @@ public class Java_oop_banking_project {
                                                 case 1:
 
                                                     Optional<Account> unlimitedAccount = bank.getSignedInCustomer().getAccList().stream()
-                                                            .filter(a -> a instanceof UnlimitedAccount)
+                                                            .filter(a -> a instanceof NonTermAccount)
                                                             .findFirst();
                                                     if (unlimitedAccount.isPresent()) {
                                                         System.out.print("So tien muon rut: ");
                                                         amount = Double.parseDouble(Configuration.sc.nextLine());
                                                         taiKhoanCoKyHan.withdraw(amount);
-                                                        UnlimitedAccount unlimitedAccountInstance = (UnlimitedAccount) unlimitedAccount.get();
+                                                        NonTermAccount unlimitedAccountInstance = (NonTermAccount) unlimitedAccount.get();
                                                         // Thực hiện các hành động với unlimitedAccountInstance ở đây
                                                         unlimitedAccountInstance.deposit(amount);
                                                     } else {
@@ -434,10 +434,10 @@ public class Java_oop_banking_project {
                                                     System.out.println("--> Yeu cau da duoc huy!");
                                                     break;
                                             }
-                                        } else if (account instanceof UnlimitedAccount) {
+                                        } else if (account instanceof NonTermAccount) {
                                             System.out.print("So tien muon rut: ");
                                             amount = Double.parseDouble(Configuration.sc.nextLine());
-                                            UnlimitedAccount taiKhoanKhongKyHan = (UnlimitedAccount) account;
+                                            NonTermAccount taiKhoanKhongKyHan = (NonTermAccount) account;
                                             taiKhoanKhongKyHan.withdraw(amount);
                                         }
 

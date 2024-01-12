@@ -5,7 +5,7 @@
 package com.team.lhp;
 
 import com.team.ntn.*;
-import static com.team.ntn.Configuration.sc;
+//import static com.team.ntn.Configuration.sc;
 import java.util.Scanner;
 //import static com.team.lhp.Scanner.sc;
 import java.time.LocalDate;
@@ -17,18 +17,18 @@ import java.util.Objects;
  *
  * @author lehoangphuc
  */
-public class TaiKhoanCoKyHan extends Account {
+public class TermAccount extends Account {
 
-    private KyHan kyHan;
-    private LocalDate ngayDaoHan;
+    private Term term;
+    private LocalDate dueDate;
     private double balance;
 
-    public TaiKhoanCoKyHan(Customer customer) {
+    public TermAccount(Customer customer) {
         super(customer);
         setAccountID(generateAccountId());
     }
 
-    public TaiKhoanCoKyHan(Customer customer, double balance, KyHan kyhan) throws Exception {
+    public TermAccount(Customer customer, double balance, Term kyhan) throws Exception {
         super(customer);
         if (balance >= 100000) {
             setBalance(balance);
@@ -37,11 +37,11 @@ public class TaiKhoanCoKyHan extends Account {
         }
         setAccountID(generateAccountId());
 
-        this.kyHan = kyHan;
-        this.ngayDaoHan = kyHan.tinhDaoHan(LocalDate.now());
+        this.term = term;
+        this.dueDate = term.calculateMaturityDate(LocalDate.now());
     }
 
-    public TaiKhoanCoKyHan(Customer customer, double balance, String accountId, KyHan kyHan, LocalDate ngayDaoHan) throws Exception {
+    public TermAccount(Customer customer, double balance, String accountId, Term kyHan, LocalDate ngayDaoHan) throws Exception {
         super(customer);
         if (balance >= 100000) {
            setBalance(balance);
@@ -50,14 +50,14 @@ public class TaiKhoanCoKyHan extends Account {
         }
         setAccountID(accountId);
 
-        this.kyHan = kyHan;
-        this.ngayDaoHan = ngayDaoHan;
+        this.term = term;
+        this.dueDate = dueDate;
     }
 
     @Override
     public void display() {
         System.out.printf("\tMa tai khoan: %s\tSo du: %.1f\n\tKy Han: %s\tNgay dao han: %s\n",
-                this.accountID, this.balance, this.kyHan, this.ngayDaoHan.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+                this.accountID, this.balance, this.term, this.dueDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
         System.out.println("\n\n======================================================================================");
     }
 
@@ -90,24 +90,24 @@ public class TaiKhoanCoKyHan extends Account {
 
         switch (luaChonKyHan) {
             case 1:
-                this.kyHan = KyHan.MOT_TUAN;
+                this.term = Term.ONE_WEEK;
                 break;
             case 2:
-                this.kyHan = KyHan.MOT_THANG;
+                this.term = Term.ONE_MONTH;
                 break;
             case 3:
-                this.kyHan = KyHan.SAU_THANG;
+                this.term = Term.SIX_MONTHS;
                 break;
             case 4:
-                this.kyHan = KyHan.MUOI_HAI_THANG;
+                this.term = Term.TWELVE_MONTHS;
                 break;
             default:
                 System.out.println("Khong hop le, ky han mac dinh se la MOT TUAN!");
-                kyHan = KyHan.MOT_TUAN;
+                term = Term.ONE_WEEK;
                 break;
         }
 
-        this.ngayDaoHan = kyHan.tinhDaoHan(LocalDate.now());
+        this.dueDate = term.calculateMaturityDate(LocalDate.now());
 
         System.out.println("\n--> Tao tai khoan thanh cong!!!");
         Thread.sleep(2000);
@@ -145,7 +145,7 @@ public class TaiKhoanCoKyHan extends Account {
             return false;
         }
 
-        TaiKhoanCoKyHan otherAccount = (TaiKhoanCoKyHan) obj;
+        TermAccount otherAccount = (TermAccount) obj;
 
         // So sánh các thuộc tính quan trọng
         return Double.compare(otherAccount.balance, balance) == 0
@@ -162,8 +162,8 @@ public class TaiKhoanCoKyHan extends Account {
     public void tinhTienLai() {
         LocalDate currentDate = LocalDate.now();
         double tienLaiDenNgayHienTai = this.getBalance() * 0.002;
-        LocalDate maturityDate = this.ngayDaoHan;
-        double tienLaiVaoNgayDaoHan = this.kyHan.tinhLai(this.balance);
+        LocalDate maturityDate = this.dueDate;
+        double tienLaiVaoNgayDaoHan = this.term.calculateInterest(this.balance);
 
         System.out.printf("\n- So tien hien tai: %.1f\n", this.balance);
         System.out.printf("- Ngay hom nay: %s\n", currentDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
@@ -173,11 +173,11 @@ public class TaiKhoanCoKyHan extends Account {
     }
 
     public boolean isDaoHan() {
-        return this.ngayDaoHan.equals(LocalDate.now());
+        return this.dueDate.equals(LocalDate.now());
     }
 
     public void capNhatDaoHan() {
-        this.ngayDaoHan = this.kyHan.tinhDaoHan(this.ngayDaoHan);
+        this.dueDate = this.term.calculateMaturityDate(this.dueDate);
     }
 
 //------------------------------//------------------------------//------------------------------
@@ -198,30 +198,30 @@ public class TaiKhoanCoKyHan extends Account {
     }
 
     /**
-     * @return the kyHan
+     * @return the term
      */
-    public KyHan getKyHan() {
-        return kyHan;
+    public Term getTerm() {
+        return term;
     }
 
     /**
-     * @param kyHan the kyHan to set
+     * @param term the term to set
      */
-    public void setKyHan(KyHan kyHan) {
-        this.kyHan = kyHan;
+    public void setTerm(Term term) {
+        this.term = term;
     }
 
     /**
-     * @return the ngayDaoHan
+     * @return the dueDate
      */
-    public LocalDate getNgayDaoHan() {
-        return ngayDaoHan;
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
     /**
-     * @param ngayDaoHan the ngayDaoHan to set
+     * @param dueDate the dueDate to set
      */
-    public void setNgayDaoHan(LocalDate ngayDaoHan) {
-        this.ngayDaoHan = ngayDaoHan;
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 }

@@ -10,17 +10,17 @@ import java.util.Objects;
  *
  * @author THANH_NAM
  */
-public class UnlimitedAccount extends Account {
+public class NonTermAccount extends Account {
 
 //    private static int count;
     private double balance;
 
-    public UnlimitedAccount(Customer customer) {
+    public NonTermAccount(Customer customer) {
         super(customer);
         setAccountID(generateAccountId());
     }
 
-    public UnlimitedAccount(Customer customer, double balance) throws Exception {
+    public NonTermAccount(Customer customer, double balance) throws Exception {
         super(customer);
         if (balance >= 100000) {
             setBalance(balance);
@@ -30,7 +30,7 @@ public class UnlimitedAccount extends Account {
         setAccountID(generateAccountId());
     }
 
-    public UnlimitedAccount(Customer customer, double balance, String accountId) throws Exception {
+    public NonTermAccount(Customer customer, double balance, String accountId) throws Exception {
         super(customer);
         if (balance >= 100000) {
             setBalance(balance);
@@ -109,7 +109,7 @@ public class UnlimitedAccount extends Account {
             return false;
         }
 
-        UnlimitedAccount otherAccount = (UnlimitedAccount) obj;
+        NonTermAccount otherAccount = (NonTermAccount) obj;
 
         // So sánh các thuộc tính quan trọng
         return Double.compare(otherAccount.balance, balance) == 0
