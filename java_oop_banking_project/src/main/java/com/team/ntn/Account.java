@@ -22,10 +22,6 @@ public class Account {
         customer.getAccList().add(this);
     }
 
-    public Account(Employee employee) {
-        this.user = employee;
-    }
-
     public String generateAccountId() {
         return String.format("%06d", ++count);
     }
@@ -83,6 +79,7 @@ public class Account {
     }
 
     /**
+     * @param user
      * @param customer the user to set
      */
     public void setUser(Person user) {
