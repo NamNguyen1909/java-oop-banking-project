@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import com.team.ntn.*;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -39,7 +40,7 @@ public class TaiKhoanCoKyHan extends Account {
         this.ngayDaoHan = kyHan.tinhDaoHan(LocalDate.now());
     }
 
-    public TaiKhoanCoKyHan(Customer customer, double balance, String accountId, KyHan kyHan) throws Exception {
+    public TaiKhoanCoKyHan(Customer customer, double balance, String accountId, KyHan kyHan,LocalDate ngayDaoHan) throws Exception {
         super(customer);
         if (balance >= 100000) {
             setBalance(balance);
@@ -49,7 +50,7 @@ public class TaiKhoanCoKyHan extends Account {
         setAccountID(accountId);
 
         this.kyHan = kyHan;
-        this.ngayDaoHan = kyHan.tinhDaoHan(LocalDate.now());
+        this.ngayDaoHan = ngayDaoHan;
     }
 
     @Override

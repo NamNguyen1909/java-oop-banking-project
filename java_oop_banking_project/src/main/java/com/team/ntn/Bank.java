@@ -15,6 +15,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -28,7 +29,6 @@ public class Bank {
 
     private List<UnlimitedAccount> unlimitedAccountList = new ArrayList<>();
     private List<TaiKhoanCoKyHan> taiKhoanCoKyHanList = new ArrayList<>();
-
 
     private Person signedInPer = null;
 
@@ -64,7 +64,6 @@ public class Bank {
         this.getUnlimitedAccountList().remove(account);
         //so sanh bang equals nen phai override equals
     }
-
 
     public void displayCustomerList() {
         System.out.println("\nDanh sach khach hang : ");
@@ -336,7 +335,6 @@ public class Bank {
 //        }
 //        return null;
 //    }
-
     public void writeUnlimitedAccountListToFile(List<UnlimitedAccount> unlimitedAccountList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
             for (UnlimitedAccount account : unlimitedAccountList) {
@@ -346,9 +344,9 @@ public class Bank {
                         + account.getBalance());
                 writer.newLine();
             }
-            System.out.println("Danh sach tai khoan UnlimitedAccount da duoc ghi vao file.");
+            System.out.println("Danh sach tai khoan khong ki han da duoc ghi vao file.");
         } catch (IOException e) {
-            System.err.println("Loi khi ghi danh sach tai khoan UnlimitedAccount vao file: " + e.getMessage());
+            System.err.println("Loi khi ghi danh sach tai khoan khong ki han vao file: " + e.getMessage());
         }
     }
 
@@ -373,9 +371,9 @@ public class Bank {
                     }
                 }
             }
-            System.out.println("Danh sach tai khoan UnlimitedAccount da duoc doc tu file.");
+            System.out.println("Danh sach tai khoan khong ki han da duoc doc tu file.");
         } catch (Exception e) {
-            System.err.println("Loi khi doc danh sach tai khoan UnlimitedAccount tu file: " + e.getMessage());
+            System.err.println("Loi khi doc danh sach tai khoan khong ki han tu file: " + e.getMessage());
         }
     }
 
@@ -387,6 +385,56 @@ public class Bank {
             }
         }
         return null;
+    }
+
+    public void writeTermAccountListToFile(List<TaiKhoanCoKyHan> termAccountList, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+            for (TaiKhoanCoKyHan account : termAccountList) {
+                writer.write(account.getAccountID() + ";"
+                        + account.getUser().getCustomerID() + ";"
+                        + account.getSoTien() + ";"
+                        + account.getKyHan().name() + ";"
+                        + account.getNgayDaoHan().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+                writer.newLine();
+            }
+            System.out.println("Danh sach tai khoan co ky han da duoc ghi vao file.");
+        } catch (IOException e) {
+            System.err.println("Loi khi ghi danh sach tai khoan co ky han vao file: " + e.getMessage());
+        }
+    }
+
+    public void readTermAccountListFromFile(List<TaiKhoanCoKyHan> termAccountList, String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Tách thông tin từ dòng đọc được
+                String[] parts = line.split(";");
+                if (parts.length == 5) { // Kiểm tra có đủ thông tin hay không
+                    String accountID = parts[0];
+                    String customerID = parts[1];
+                    double balance = Double.parseDouble(parts[2]);
+                    KyHan kyHan = KyHan.valueOf(parts[3]);
+                    LocalDate ngayDaoHan = LocalDate.parse(parts[4], DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
+
+                    // Tìm khách hàng trong danh sách khách hàng
+                    Customer customer = getCustomerByID(customerID);
+
+                    if (customer != null) {
+                        try {
+                            // Sử dụng phương thức khởi tạo có sẵn của TaiKhoanCoKyHan
+                            TaiKhoanCoKyHan taiKhoanCoKyHan = new TaiKhoanCoKyHan(customer, balance, accountID, kyHan,ngayDaoHan);
+                           
+                            termAccountList.add(taiKhoanCoKyHan);
+                        } catch (Exception e) {
+                            System.err.println("Loi khi tao tai khoan co ky han: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+            System.out.println("Danh sach tai khoan co ky han da duoc doc tu file.");
+        } catch (Exception e) {
+            System.err.println("Loi khi doc danh sach tai khoan co ky han tu file: " + e.getMessage());
+        }
     }
 
     //---------------------------------------------------------------------------

@@ -30,7 +30,8 @@ public class Java_oop_banking_project {
 
         bank.readCustomerListFromFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
         bank.readUnlimitedAccountListFromFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
-
+        bank.readTermAccountListFromFile(bank.getTaiKhoanCoKyHanList(), "src/main/resources/termAccountList.txt");
+        
         Customer ct1 = new Customer("Customer 1", "Nam", "12/01/2001", "HCM", "123");
         Customer ct2 = new Customer("Customer 2", "nam", "19/11/2001", "HCM", "123213");
 
@@ -43,8 +44,6 @@ public class Java_oop_banking_project {
         bank.displayEmployeeList();
         bank.displayAccountList();
 
-        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
-        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
         int option;
         double amount;
         do {
@@ -392,6 +391,8 @@ public class Java_oop_banking_project {
                     bank.signOut();
                     bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
                     bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
+                    bank.writeTermAccountListToFile(bank.getTaiKhoanCoKyHanList(), "src/main/resources/termAccountList.txt");
+
                     System.out.println("\n\t=====Goodbye=====\n");
                     Thread.sleep(2500);
                     break;
