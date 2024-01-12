@@ -112,7 +112,7 @@ public class Person {
     }
 
     public void display() {
-        System.out.println("\n=============================================================================");
+        System.out.println("\n=======================================================================================");
 
         System.out.printf("\n\tHo ten: %s\tNgay sinh: %s\tGioi tinh: %s\n\tQue quan: %s\t\t\tCCCD: %s\n",
                 this.fullName, this.dateOfBirth.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)),
@@ -228,7 +228,7 @@ public class Person {
     public String getEmployeeID() {
         return null;
     }
-    
+
     public String getCustomerID() {
         return null;
     }

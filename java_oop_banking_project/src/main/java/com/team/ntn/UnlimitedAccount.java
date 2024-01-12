@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 public class UnlimitedAccount extends Account {
 
-    private static int count;
+//    private static int count;
     private double balance;
 
     public UnlimitedAccount(Customer customer) {
@@ -44,13 +44,14 @@ public class UnlimitedAccount extends Account {
     public void display() {
         super.display();
         System.out.printf("\tSo du: %.1f", this.balance);
-        System.out.println("\n----------------------------------------------------------------------------");
+        System.out.println("\n======================================================================================");
     }
 
     @Override
     public void input() throws InterruptedException {
-        System.out.println("\n\n~~~~~Nhap tai khoan ");
-        super.display();
+//        System.out.println("\n\n~~~~~Nhap tai khoan ");
+        System.out.println("\n--------------------------------------------------------------------------------------");
+//        super.display();
         float soTien;
         do {
             try {
@@ -72,7 +73,7 @@ public class UnlimitedAccount extends Account {
             // Nếu chương trình đã đi đến đây, nghĩa là giá trị soTien hợp lệ
             break; // Thoát khỏi vòng lặp
         } while (true); // Lặp lại nếu giá trị soTien không hợp lệ
-        System.out.println("=>Tao tai khoan thanh cong!!!");
+        System.out.println("--> Tao tai khoan thanh cong!!!");
         Thread.sleep(2000);
     }
 
@@ -92,6 +93,8 @@ public class UnlimitedAccount extends Account {
         if (amount > 0 && this.balance - amount >= 50000) {
             setBalance(this.balance - amount);
             System.out.println("Rut tien thanh cong!");
+            System.out.printf("So du moi: %.1f\n", this.getBalance());
+
         } else {
             System.out.println("So tien toi thieu can de tai khoan la 50000. Rut tien khong thanh cong!");
         }
@@ -118,8 +121,12 @@ public class UnlimitedAccount extends Account {
         // Tạo mã băm dựa trên các thuộc tính quan trọng
         return Objects.hash(balance, accountID);
     }
-    
 
+    @Override
+    public void tinhTienLai() {
+        System.out.printf("So tien hien tai: %.1f\n", this.balance);
+        System.out.printf("Tien lai nhan duoc sau 1 nam: %.1f\n", this.balance * 0.002 / 100);
+    }
 
     /**
      * @return the balance

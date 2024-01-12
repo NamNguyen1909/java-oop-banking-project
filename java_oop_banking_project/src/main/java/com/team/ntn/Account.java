@@ -12,6 +12,7 @@ import java.util.Random;
  * @author THANH_NAM
  */
 public class Account {
+
     private static int count;
     protected Person user;
     protected String accountID;
@@ -24,26 +25,26 @@ public class Account {
     public Account(Employee employee) {
         this.user = employee;
     }
+
     public String generateAccountId() {
         return String.format("%06d", ++count);
     }
 
     public void display() {
-        System.out.println("\nMa tai khoan: "+getAccountID());
+        System.out.println("\n\tMa tai khoan: " + getAccountID());
     }
 
     public void input() throws InterruptedException {
 
     }
 
-
-
-    
-
     public void deposit(double amount) {
     }
 
     public void withdraw(double amount) {
+    }
+
+    public void tinhTienLai() {
     }
 
     @Override
@@ -101,6 +102,5 @@ public class Account {
     public void setAccountID(String accountID) {
         this.accountID = accountID;
     }
-
 
 }

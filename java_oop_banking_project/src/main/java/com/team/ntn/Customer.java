@@ -57,9 +57,9 @@ public class Customer extends Person {
     public void input() throws InterruptedException {
         System.out.println("\n~~~~~Nhap khach hang");
         super.input();
-        System.out.printf("\nMa khach hang: %s\nUsername: %s\tPassword: %s" + this.customerID, this.username, this.password);
+        System.out.printf("\nMa khach hang: %s\nUsername: %s\tPassword: %s\n", this.customerID, this.username, this.password);
 
-        System.out.println("=>Dang ky khach hang moi thanh cong!!!");
+        System.out.println("--> Dang ky khach hang moi thanh cong!!!");
         Thread.sleep(1000);
     }
 
@@ -80,7 +80,7 @@ public class Customer extends Person {
     public void display() {
         super.display();
         System.out.printf("\tMa khach hang: %s", this.customerID);
-        System.out.printf("\nUsername: %s \t\tPassword: %s\n",
+        System.out.printf("\n\tUsername: %s \t\tPassword: %s\n",
                 this.username, this.password);
     }
 

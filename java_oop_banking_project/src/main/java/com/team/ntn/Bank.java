@@ -4,6 +4,7 @@
  */
 package com.team.ntn;
 
+import com.team.lhp.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,6 +27,8 @@ public class Bank {
     private List<Employee> employeeList = new ArrayList<>();
 
     private List<UnlimitedAccount> unlimitedAccountList = new ArrayList<>();
+    private List<TaiKhoanCoKyHan> taiKhoanCoKyHanList = new ArrayList<>();
+
     private List<EAccount> employeeAccountList = new ArrayList<>();
 
     private Person signedInPer = null;
@@ -52,6 +55,10 @@ public class Bank {
 
     public void addUnlimitedAccount(UnlimitedAccount... accounts) {
         this.getUnlimitedAccountList().addAll(Arrays.asList(accounts));
+    }
+
+    public void addTaiKhoanCoKyHan(TaiKhoanCoKyHan... accounts) {
+        this.getTaiKhoanCoKyHanList().addAll(Arrays.asList(accounts));
     }
 
     public void removeUnlimitedAccount(UnlimitedAccount account) {
@@ -209,7 +216,24 @@ public class Bank {
     public void signOut() {
         this.setSignedInPer(null);
     }
-    //---------------------------------------------------------------------------
+
+    int loaiTaiKhoan(String soTaiKhoan) {
+        // Duyệt qua danh sách ClassA
+        for (UnlimitedAccount objA : unlimitedAccountList) {
+            if (objA.user.IDCard.equals(soTaiKhoan)) {
+                return 1;
+            }
+        }
+
+        // Duyệt qua danh sách ClassB
+        for (TaiKhoanCoKyHan objB : getTaiKhoanCoKyHanList()) {
+            if (objB.user.IDCard.equals(soTaiKhoan)) {
+                return 2;
+            }
+        }
+        return 0;
+    }
+//---------------------------------------------------------------------------
 
     public void writeCustomerListToFile(List<Customer> customerList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
@@ -512,6 +536,20 @@ public class Bank {
      */
     public void setSignedIn(Employee signedIn) {
         this.signedInPer = signedIn;
+    }
+
+    /**
+     * @return the taiKhoanCoKyHanList
+     */
+    public List<TaiKhoanCoKyHan> getTaiKhoanCoKyHanList() {
+        return taiKhoanCoKyHanList;
+    }
+
+    /**
+     * @param taiKhoanCoKyHan the taiKhoanCoKyHanList to set
+     */
+    public void setTaiKhoanCoKyHanList(List<TaiKhoanCoKyHan> taiKhoanCoKyHan) {
+        this.taiKhoanCoKyHanList = taiKhoanCoKyHan;
     }
 
 }

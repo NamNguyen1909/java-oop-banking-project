@@ -3,6 +3,7 @@
  */
 package com.team.java_oop_banking_project;
 
+import com.team.lhp.TaiKhoanCoKyHan;
 import com.team.ntn.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,6 @@ public class Java_oop_banking_project {
 //
 //        bank.writeCustomerListToFile(bank.getCustomerList(), "src/main/resources/customerList.txt");
 //        bank.writeUnlimitedAccountListToFile(bank.getUnlimitedAccountList(), "src/main/resources/unlimitedAccountList.txt");
-
         int option;
         double amount;
         do {
@@ -101,8 +101,11 @@ public class Java_oop_banking_project {
                                     bank.getCustomerList().stream().filter(a -> a.equals(bank.getSignedInPer())).findFirst().get().setPassword(Configuration.sc.nextLine());
                                     break;
                                 case 4:
-                                    //tao tai khoan co ki han
+                                    //tao tai khoan co ky han
 
+                                    TaiKhoanCoKyHan taiKhoan = new TaiKhoanCoKyHan(bank.getSignedInCustomer());
+                                    taiKhoan.input();
+                                    bank.addTaiKhoanCoKyHan(taiKhoan);
                                     break;
                                 case 5:
                                     System.out.print("Nhap ma tai khoan muon gui: ");
@@ -124,11 +127,35 @@ public class Java_oop_banking_project {
 
                                 case 6:
                                     //rut tien
+                                    System.out.print("Nhap ma tai khoan muon rut: ");
+                                    String maTaiKhoanRutTien = Configuration.sc.nextLine();
+                                    // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
+                                    Optional<Account> taiKhoanRutTienTimThay = bank.getSignedInCustomer().getAccList().stream()
+                                            .filter(a -> a.getAccountID().equals(maTaiKhoanRutTien))
+                                            .findFirst();
 
+                                    if (taiKhoanRutTienTimThay.isPresent()) {
+                                        System.out.print("So tien muon rut: ");
+                                        amount = Double.parseDouble(Configuration.sc.nextLine());
+                                        taiKhoanRutTienTimThay.get().withdraw(amount);
+                                    } else {
+                                        System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanRutTien);
+                                    }
                                     break;
                                 case 7:
                                     //tinh tien lai
+                                    System.out.print("Nhap ma tai khoan can tinh lai: ");
+                                    String maTaiKhoanTinhLai = Configuration.sc.nextLine();
+                                    // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
+                                    Optional<Account> taiKhoanTinhLaiTimThay = bank.getSignedInCustomer().getAccList().stream()
+                                            .filter(a -> a.getAccountID().equals(maTaiKhoanTinhLai))
+                                            .findFirst();
 
+                                    if (taiKhoanTinhLaiTimThay.isPresent()) {
+                                        taiKhoanTinhLaiTimThay.get().tinhTienLai();
+                                    } else {
+                                        System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanTinhLai);
+                                    }
                                     break;
                                 case 8:
                                     bank.signOut();
@@ -213,37 +240,25 @@ public class Java_oop_banking_project {
                                     }
                                     break;
                                 case 6:
-                                    System.out.print("Nhap ten ma cua tai khoan can xoa: ");
-                                    String matk = Configuration.sc.nextLine();
-
-                                    boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
-                                    //phai tim trong 2 danh sach co ky han va khong ky han
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    for (Account a : bank.getAccountList()) {
-                                        if (a.getUsername().equals(tentk) && a.getPassword().equals(matkhautk)) {
-                                            bank.removeAccount(a);
-                                            found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
-                                            System.out.println("=>Xoa thanh cong");
-                                            break;
-                                        }
-                                    }
-
-                                    // Kiểm tra biến cờ để xuất thông báo phù hợp
-                                    if (!found) {
-                                        System.out.println("=>Khong tim thay tai khoan");
-                                    }
+//                                    System.out.print("Nhap ten ma cua tai khoan can xoa: ");
+//                                    String matk = Configuration.sc.nextLine();
+//
+//                                    boolean found = false;  // Biến cờ để kiểm tra xem có tìm thấy tài khoản hay không
+//                                    //phai tim trong 2 danh sach co ky han va khong ky han
+//
+//                                    for (Account a : bank.getAccountList()) {
+//                                        if (a.getUsername().equals(tentk) && a.getPassword().equals(matkhautk)) {
+//                                            bank.removeAccount(a);
+//                                            found = true;  // Đặt biến cờ thành true khi tìm thấy tài khoản
+//                                            System.out.println("=>Xoa thanh cong");
+//                                            break;
+//                                        }
+//                                    }
+//
+//                                    // Kiểm tra biến cờ để xuất thông báo phù hợp
+//                                    if (!found) {
+//                                        System.out.println("=>Khong tim thay tai khoan");
+//                                    }
 
                                     break;
                                 case 7:
@@ -320,7 +335,20 @@ public class Java_oop_banking_project {
                                     break;
                                 case 2:
                                     //rut tien 
+                                    System.out.print("Nhap ma tai khoan muon rut: ");
+                                    String maTaiKhoanRutTien = Configuration.sc.nextLine();
+                                    // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
+                                    Optional<Account> taiKhoanRutTienTimThay = bank.getSignedInCustomer().getAccList().stream()
+                                            .filter(a -> a.getAccountID().equals(maTaiKhoanRutTien))
+                                            .findFirst();
 
+                                    if (taiKhoanRutTienTimThay.isPresent()) {
+                                        System.out.print("So tien muon rut: ");
+                                        amount = Double.parseDouble(Configuration.sc.nextLine());
+                                        taiKhoanRutTienTimThay.get().withdraw(amount);
+                                    } else {
+                                        System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanRutTien);
+                                    }
                                     break;
                                 case 3:
                                     bank.signOut();
@@ -335,7 +363,18 @@ public class Java_oop_banking_project {
                     bank.signIn();
                     if (bank.getSignedInCustomer() != null) {
                         //tinh tien lai
+                        System.out.print("Nhap ma tai khoan can tinh lai: ");
+                        String maTaiKhoanTinhLai = Configuration.sc.nextLine();
+                        // Sử dụng Optional<Account> để xử lý kết quả có hoặc không
+                        Optional<Account> taiKhoanTinhLaiTimThay = bank.getSignedInCustomer().getAccList().stream()
+                                .filter(a -> a.getAccountID().equals(maTaiKhoanTinhLai))
+                                .findFirst();
 
+                        if (taiKhoanTinhLaiTimThay.isPresent()) {
+                            taiKhoanTinhLaiTimThay.get().tinhTienLai();
+                        } else {
+                            System.out.println("Khong tim thay tai khoan co ma: " + maTaiKhoanTinhLai);
+                        }
                     }
                     break;
                 case 5:
