@@ -37,7 +37,7 @@ public class Java_oop_banking_project {
 
         NonTermAccount at3 = new NonTermAccount(ct1, 111111);
         NonTermAccount at4 = new NonTermAccount(ct2, 222222);
-        TermAccount at5 = new TermAccount(ct1, 333333, Term.SIX_MONTHS);
+        TermAccount at5 = new TermAccount(ct1, 100000, Term.SIX_MONTHS);
         TermAccount at6 = new TermAccount(ct2, 444444, Term.TWELVE_MONTHS);
         bank.addCustomer(ct1, ct2);
         bank.addNonTermAccount(at3, at4);
@@ -159,13 +159,15 @@ public class Java_oop_banking_project {
                                                     if (unlimitedAccount.isPresent()) {
                                                         System.out.print("So tien muon rut: ");
                                                         amount = Double.parseDouble(Configuration.sc.nextLine());
-                                                        taiKhoanCoKyHan.withdraw(amount);
-                                                        NonTermAccount unlimitedAccountInstance = (NonTermAccount) unlimitedAccount.get();
+                                                        if (amount > 0 && taiKhoanCoKyHan.getBalance() - amount >= 0) {
+                                                            taiKhoanCoKyHan.withdraw(amount);
+                                                            NonTermAccount unlimitedAccountInstance = (NonTermAccount) unlimitedAccount.get();
 
-                                                        if (taiKhoanCoKyHan.getBalance() > 0) {
                                                             // Thực hiện các hành động với unlimitedAccountInstance ở đây
                                                             unlimitedAccountInstance.deposit(amount * 100.2 / 100);
-                                                        } 
+                                                        } else {
+                                                            System.out.println("--> So tien rut vuot qua so tien tai khoan co");
+                                                        }
                                                     } else {
                                                         System.out.println("Khong tim thay tai khoan khong ky han.");
                                                     }

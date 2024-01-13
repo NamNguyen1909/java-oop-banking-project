@@ -57,7 +57,7 @@ public class TermAccount extends Account {
     @Override
     public void display() {
         System.out.printf("\tMa tai khoan: %s\tSo du: %.1f\n\tKy Han: %s\tNgay dao han: %s\n",
-                this.accountID, this.balance, this.term, this.dueDate.format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
+                this.accountID, this.balance, this.term, getDueDate().format(DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT)));
         System.out.println("\n\n======================================================================================");
     }
 

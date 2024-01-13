@@ -70,4 +70,13 @@ public enum Term {
     public abstract LocalDate calculateMaturityDate(LocalDate d);
 
     public abstract double calculateInterest(double d);
+
+    public static Term fromString(String term) {
+        for (Term t : values()) {
+            if (t != null && t.name().equalsIgnoreCase(term)) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException("No constant with term " + term + " found");
+    }
 }

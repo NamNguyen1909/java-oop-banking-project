@@ -81,7 +81,7 @@ public class Bank {
         System.out.println("\nDanh sach tai khoan: ");
 
         this.getNonTermAccountList().forEach(u -> u.display());
-        this.getTermAccountList().forEach(a->a.display());
+        this.getTermAccountList().forEach(a -> a.display());
     }
 
     //Tra cứu khách hàng theo họ tên và mã số khách hàng.
@@ -414,7 +414,14 @@ public class Bank {
                     String accountID = parts[0];
                     String customerID = parts[1];
                     double balance = Double.parseDouble(parts[2]);
-                    Term kyHan = Term.valueOf(parts[3]);
+                    Term kyHan;
+                    try {
+                        kyHan = Term.fromString(parts[3]);
+                    } catch (IllegalArgumentException e) {
+                        System.err.println("Giá trị KyHan không hợp lệ trong tệp: " + parts[3]);
+                        // Xử lý trường hợp này (cung cấp giá trị mặc định hoặc bỏ qua bản ghi)
+                        continue;
+                    }
                     LocalDate ngayDaoHan = LocalDate.parse(parts[4], DateTimeFormatter.ofPattern(Configuration.DATE_FORMAT));
 
                     // Tìm khách hàng trong danh sách khách hàng
@@ -423,8 +430,8 @@ public class Bank {
                     if (customer != null) {
                         try {
                             // Sử dụng phương thức khởi tạo có sẵn của TermAccount
-                            TermAccount taiKhoanCoKyHan = new TermAccount(customer, balance, accountID, kyHan,ngayDaoHan);
-                           
+                            TermAccount taiKhoanCoKyHan = new TermAccount(customer, balance, accountID, kyHan, ngayDaoHan);
+
                             termAccountList.add(taiKhoanCoKyHan);
                         } catch (Exception e) {
                             System.err.println("Loi khi tao tai khoan co ky han: " + e.getMessage());
