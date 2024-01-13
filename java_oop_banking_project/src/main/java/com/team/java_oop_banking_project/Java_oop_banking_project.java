@@ -144,7 +144,7 @@ public class Java_oop_banking_project {
                                             do {
                                                 System.out.println("--> Rut tien truoc ky han, lai suat chi con 0.2%");
                                                 System.out.println("--> Quy khach co dong y khong?");
-                                                System.out.println("--> [1] Co\t\t[0] Khong: ");
+                                                System.out.println("--> [1] Co\t\t[0] Khong");
                                                 System.out.print("Nhap lua chon cua ban: ");
 
                                                 option = Bank.getUserSelection(0, 1);
@@ -161,13 +161,16 @@ public class Java_oop_banking_project {
                                                         amount = Double.parseDouble(Configuration.sc.nextLine());
                                                         taiKhoanCoKyHan.withdraw(amount);
                                                         NonTermAccount unlimitedAccountInstance = (NonTermAccount) unlimitedAccount.get();
-                                                        // Thực hiện các hành động với unlimitedAccountInstance ở đây
-                                                        unlimitedAccountInstance.deposit(amount * 100.2 / 100);
+
+                                                        if (taiKhoanCoKyHan.getBalance() > 0) {
+                                                            // Thực hiện các hành động với unlimitedAccountInstance ở đây
+                                                            unlimitedAccountInstance.deposit(amount * 100.2 / 100);
+                                                        } 
                                                     } else {
-                                                        System.out.println("Khong tim thay tai khoan khong ki han.");
+                                                        System.out.println("Khong tim thay tai khoan khong ky han.");
                                                     }
                                                     break;
-                                                case 2:
+                                                case 0:
                                                     System.out.println("--> Yeu cau da duoc huy!");
                                                     break;
                                             }
@@ -464,7 +467,7 @@ public class Java_oop_banking_project {
                     System.out.println("~~~~~Dang nhap");
                     bank.signIn();
                     if (bank.getSignedInCustomer() != null) {
-                        bank.getSignedInCustomer().getAccList().forEach(a->a.display());
+                        bank.getSignedInCustomer().getAccList().forEach(a -> a.display());
                         //tinh tien lai
                         System.out.print("Nhap ma tai khoan can tinh lai: ");
                         String maTaiKhoanTinhLai = Configuration.sc.nextLine();
