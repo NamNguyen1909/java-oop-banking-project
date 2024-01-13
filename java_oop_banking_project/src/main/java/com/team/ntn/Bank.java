@@ -233,6 +233,7 @@ public class Bank {
 
     public void writeCustomerListToFile(List<Customer> customerList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+
             for (Customer customer : customerList) {
                 // Ghi thông tin của mỗi khách hàng vào tệp tin
                 writer.write(customer.getFullName() + ";"
@@ -253,6 +254,7 @@ public class Bank {
 
     public void readCustomerListFromFile(List<Customer> customerList, String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
             String line;
             while ((line = reader.readLine()) != null) {
                 // Tách thông tin từ dòng đọc được
@@ -281,6 +283,7 @@ public class Bank {
 
     public void writeEmployeeListToFile(List<Employee> employeeList, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+
             for (Employee employee : employeeList) {
                 // Ghi thông tin của mỗi nhân viên vào tệp tin
                 writer.write(employee.getFullName() + ";"
@@ -337,7 +340,9 @@ public class Bank {
 //        return null;
 //    }
     public void writeUnlimitedAccountListToFile(List<NonTermAccount> unlimitedAccountList, String filePath) {
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+
             for (NonTermAccount account : unlimitedAccountList) {
                 // Ghi thông tin của mỗi tài khoản NonTermAccount vào tệp tin
                 writer.write(account.getAccountID() + ";"
@@ -353,6 +358,7 @@ public class Bank {
 
     public void readUnlimitedAccountListFromFile(List<NonTermAccount> unlimitedAccountList, String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
             String line;
             while ((line = reader.readLine()) != null) {
                 // Tách thông tin từ dòng đọc được
@@ -389,7 +395,9 @@ public class Bank {
     }
 
     public void writeTermAccountListToFile(List<TermAccount> termAccountList, String filePath) {
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, false))) {
+
             for (TermAccount account : termAccountList) {
                 writer.write(account.getAccountID() + ";"
                         + account.getUser().getCustomerID() + ";"
@@ -406,6 +414,7 @@ public class Bank {
 
     public void readTermAccountListFromFile(List<TermAccount> termAccountList, String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
             String line;
             while ((line = reader.readLine()) != null) {
                 // Tách thông tin từ dòng đọc được

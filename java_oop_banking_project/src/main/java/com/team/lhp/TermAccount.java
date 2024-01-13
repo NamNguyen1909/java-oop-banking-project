@@ -50,8 +50,8 @@ public class TermAccount extends Account {
         }
         setAccountID(accountId);
 
-        this.term = term;
-        this.dueDate = dueDate;
+        this.term = kyHan;
+        this.dueDate = ngayDaoHan;
     }
 
     @Override

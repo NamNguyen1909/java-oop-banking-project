@@ -1,2 +1,0 @@
-Thanh Nam;Nam;19/09/2004;Ben Tre;1234567890;0001;0001;admin
-Hoang Phuc;Nam;01/02/2004;Ben Tre;1312312331;0002;0002;admin
